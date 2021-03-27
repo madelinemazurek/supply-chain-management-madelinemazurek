@@ -9,16 +9,14 @@ public class WriteText{
     private String number;
     private String[] itemIDs;
     private String price;
-    private boolean canComplete;
     private String output;
 
-    public WriteText(String category, String type, String number, String[] itemIDs, String price, boolean canComplete){
+    public WriteText(String category, String type, String number, String[] itemIDs, String price){
         this.category = category;
         this.type = type;
         this.number = number;
         this.itemIDs = itemIDs;
         this.price = price;
-        this.canComplete = canComplete;
     }
 
     private void writeOutput(){
@@ -31,12 +29,7 @@ public class WriteText{
             System.out.println("Error opening output file.");
             e.printStackTrace();
         }
-        if(canComplete){
-            formatOutputComplete();
-        }
-        else{
-            formatOutputCannotComplete();
-        }
+        formatOutputComplete();
 
         try{
             writer.write(this.output);
@@ -79,10 +72,6 @@ public class WriteText{
         }
         this.output += "\n";
         this.output += "Total Price: $" + price;
-    }
-
-    private void formatOutputCannotComplete(){
-
     }
 
 }
