@@ -16,7 +16,7 @@ import org.junit.*;
     public class ScmTest {
         @Test
         public void searchInventoryConstructorAndGetOrderFoundTest(){
-
+            //this test will not delete from database. Deletion occurs elsewhere. Done for ease of testing.
             String category = "chair";
             String type = "Mesh";
             int numberOfItems = 1;
@@ -29,7 +29,7 @@ import org.junit.*;
 
         @Test
         public void searchInventoryConstructorAndGetBestOrderTest(){
-
+            //this test will not delete from database. Deletion occurs elsewhere. Done for ease of testing.
             String category = "filing";
             String type = "Large";
             int numberOfItems = 2;
