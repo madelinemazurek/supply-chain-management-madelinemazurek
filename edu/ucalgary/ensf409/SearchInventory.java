@@ -24,6 +24,29 @@ public class SearchInventory {
     }
 
     //public void generateAllSets()
+
+        //applicableTableRows is what is returned from databaseAccess class and contains the reduced table which only includes the rows with the right type
+        public <T> void generateAllSets(){
+
+            //n is the total number of subsets (2^n)
+            int n = (int) Math.pow(2,items.length);
+    
+            //create all subsets 
+            for(int i = 1; i < n; i++){
+                
+                ArrayList<T> subset= new ArrayList<>();
+    
+                for(int j = 0; j < items.length;j++){
+                    //if the jth bit of i is 1 we want to include that in the subset
+                    if((i & (1<<j)) != 0){
+                        subset.add(items[j]);
+                    }
+                }
+                //check if if the subset generated is valid
+                checkValidSet(subset);
+            }
+        }
+
     //runs through all possible sets (power set of items) calling checkValidSet() for each
 
     //method checkValidSet returns void
