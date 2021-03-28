@@ -219,10 +219,4 @@ public class DatabaseAccess{
             return empty;
         }
     }
-    public static void main(String[] args){
-        DatabaseAccess test = new DatabaseAccess("jdbc:mysql://localhost/inventory", "ethan", "Roxanne3");
-        test.initializeConnection();
-        ArrayList<String> cool = test.fetchManufacturerName("lamp");
-        System.out.println(cool);
-    }
 }
