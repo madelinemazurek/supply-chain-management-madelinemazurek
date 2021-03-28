@@ -90,6 +90,37 @@ public class DatabaseAccess{
         }
         return typeString;
     }
+    public ArrayList<String> fetchManufacturerName(String table){
+        ArrayList <String> manufacturerID = new ArrayList<String>();
+        try{
+            String query = "SELECT * FROM " + table;
+            Statement stmt = dbConnect.createStatement();
+            results = stmt.executeQuery(query);
+            while(results.next()){
+                if(!manufacturerID.contains(results.getString("ManuID"))){
+                    manufacturerID.add(results.getString("ManuID"));
+                }
+            }
+            stmt.close();
+        } catch(SQLException e){
+            System.out.println("Could not execute query");
+        }
+        ArrayList<String> manufacturerName = new ArrayList<String>();
+        try{
+            String query = "SELECT * FROM MANUFACTURER";
+            Statement stmt = dbConnect.createStatement();
+            results = stmt.executeQuery(query);
+            while(results.next()){
+                if(manufacturerID.contains(results.getString("ManuID") )){
+                    manufacturerName.add(results.getString("Name"));
+                }
+            }
+            stmt.close();
+        } catch(SQLException e){
+            System.out.println("Could not execute query");
+        }
+        return manufacturerName;
+    }
     public ArrayList<String> fetchSpecificType(String table, String type){
         ArrayList <String> columns = fetchColumns(table);
         ArrayList<String> validArray = new ArrayList<String>();
@@ -187,5 +218,11 @@ public class DatabaseAccess{
             T[] empty = null;
             return empty;
         }
+    }
+    public static void main(String[] args){
+        DatabaseAccess test = new DatabaseAccess("jdbc:mysql://localhost/inventory", "ethan", "Roxanne3");
+        test.initializeConnection();
+        ArrayList<String> cool = test.fetchManufacturerName("lamp");
+        System.out.println(cool);
     }
 }
