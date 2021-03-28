@@ -5,9 +5,9 @@ public class SearchInventory <T> {
     private String furnitureCategory; //table to be searched
     private int numItems; //number of items that the order must fulfill
 
-    private ArrayList<T> items; //array of all items of model type in inventory
-    private ArrayList <Order> allOrders; //all possible orders that satisfy requirements
-    private Order bestOrder; //the cheapest order that satisfies the requirements
+    private ArrayList<T> items = new ArrayList<>(); //array of all items of model type in inventory
+    private ArrayList <Order<FurnitureItem>> allOrders = new ArrayList<>(); //all possible orders that satisfy requirements
+    private Order<FurnitureItem> bestOrder; //the cheapest order that satisfies the requirements
     private boolean orderFound = false; // true if an order can be fulfilled, false otherwise
 
     public SearchInventory (String furnitureCategory, String model, int numItems, DatabaseAccess db) {
@@ -28,7 +28,7 @@ public class SearchInventory <T> {
         return this.orderFound;
     }
 
-    public Order getBestOrder() {
+    public Order<FurnitureItem> getBestOrder() {
         return bestOrder;
     }
 
@@ -64,22 +64,22 @@ public class SearchInventory <T> {
     private <T> void checkValidSet(ArrayList<T> subset) {
         if(furnitureCategory.toLowerCase().equals("chair")) {
             if(checkChairSet((Chair[])subset.toArray()) == true) {
-                Order theOrder = new Order(subset);
+                Order<FurnitureItem> theOrder = new Order(subset);
                 allOrders.add(theOrder);
             }
         } else if(furnitureCategory.toLowerCase().equals("desk")) {
             if(checkDeskSet((Desk[])subset.toArray()) == true) {
-                Order theOrder = new Order(subset);
+                Order<FurnitureItem> theOrder = new Order(subset);
                 allOrders.add(theOrder);
             }
         } else if(furnitureCategory.toLowerCase().equals("filing")) {
             if(checkFilingSet((Filing[])subset.toArray()) == true) {
-                Order theOrder = new Order(subset);
+                Order<FurnitureItem> theOrder = new Order(subset);
                 allOrders.add(theOrder);
             }
         } else if(furnitureCategory.toLowerCase().equals("lamp")) {
             if(checkLampSet((Lamp[])subset.toArray()) == true) {
-                Order theOrder = new Order(subset);
+                Order<FurnitureItem> theOrder = new Order(subset);
                 allOrders.add(theOrder);
             }
         }
