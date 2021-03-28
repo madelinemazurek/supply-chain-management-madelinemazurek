@@ -64,19 +64,29 @@ public class SearchInventory <T> {
 
     //applicableTableRows is what is returned from databaseAccess class and contains the 
     //reduced table which only includes the rows with the right type
+    
     private <T> void generateAllSets(){
 
+        //We calculate the total number of subsets from the set of all matching furniture types.
         //n is the total number of subsets (2^n)
         int n = (int) Math.pow(2,items.size());
     
         //create all subsets 
+        //In this outside loop, we iterate from 1 to the size of the powerset
+        //we iterate from 1 because we want to ignore the empty set (the subset containing no elements)
         for(int i = 1; i < n; i++){
-                
             ArrayList<T> subset= new ArrayList<>();
-    
+            //in the inner loop, we iterate from zero to the size of the original set
+            //we imagine i as a binary number, and we will use the set bits to determine 
+            // which elements to include in this element of the powerset
             for(int j = 0; j < items.size();j++){
-                //if the jth bit of i is 1 we want to include that in the subset
+                //we will create a bitmask to determine which of the bits of i are set
+                //we create the bitmask by left shifting a 1 by j bits, and then bitwise ANDing i and the bit-shifted 1
+                //if the result of the bitwise AND isn't zero, we know that the bitmask's 1 overlapped with a 1 in i
+                //therefore, we include it in the subset
                 if((i & (1<<j)) != 0){
+                    //we iterate through every bit of i using this left shifting bit mask to determine all elements
+                    //that should be contained in the subset
                     subset.add((T)items.get(j));
                 }
             }
