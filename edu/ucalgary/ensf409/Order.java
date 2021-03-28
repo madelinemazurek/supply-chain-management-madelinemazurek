@@ -33,7 +33,7 @@ public class Order <T> {
             retString.add(((FurnitureItem)this.items.get(i)).getID());
         }
 
-        return (String[]) retString.toArray();
+        return (String[]) retString.toArray(new String[0]);
     }
 
     public void calculateCost(){

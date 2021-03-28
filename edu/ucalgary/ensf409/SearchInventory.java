@@ -63,22 +63,22 @@ public class SearchInventory <T> {
     //if check______Set returns true, create order for set and add order to allOrders
     private <T> void checkValidSet(ArrayList<T> subset) {
         if(furnitureCategory.toLowerCase().equals("chair")) {
-            if(checkChairSet((Chair[])subset.toArray()) == true) {
+            if(checkChairSet((Chair[])subset.toArray(new Chair[0])) == true) {
                 Order<FurnitureItem> theOrder = new Order(subset);
                 allOrders.add(theOrder);
             }
         } else if(furnitureCategory.toLowerCase().equals("desk")) {
-            if(checkDeskSet((Desk[])subset.toArray()) == true) {
+            if(checkDeskSet((Desk[])subset.toArray(new Desk[0])) == true) {
                 Order<FurnitureItem> theOrder = new Order(subset);
                 allOrders.add(theOrder);
             }
         } else if(furnitureCategory.toLowerCase().equals("filing")) {
-            if(checkFilingSet((Filing[])subset.toArray()) == true) {
+            if(checkFilingSet((Filing[])subset.toArray(new Filing[0])) == true) {
                 Order<FurnitureItem> theOrder = new Order(subset);
                 allOrders.add(theOrder);
             }
         } else if(furnitureCategory.toLowerCase().equals("lamp")) {
-            if(checkLampSet((Lamp[])subset.toArray()) == true) {
+            if(checkLampSet((Lamp[])subset.toArray(new Lamp[0])) == true) {
                 Order<FurnitureItem> theOrder = new Order(subset);
                 allOrders.add(theOrder);
             }

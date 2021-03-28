@@ -2,7 +2,9 @@
 // make it so navigation doesn't delete  previous entries
 // make it so can check over entries before submiting form request
 
-//*********************** for category check manufacturer is valid input --> should not be!!!!!!!!!!!!!!!!1
+//WHAT DO I PASS TO DATABASE CONSTRUCTOR???????????????????????????????
+
+//DOCUMENT
 
 package edu.ucalgary.ensf409;
 
@@ -19,12 +21,18 @@ public class Menu {
     private SearchInventory searchInventoryObj;
     private WriteText writeTextObj;
 
+    public static void main(String args[]){
+        Menu menu = new Menu();
+    }
+
     /**
      * Default constructor that will initialize dataBaseObj and call printMenu() to start the user input process which will initialize the other data members
      */
     public Menu(){
-        this.databaseObj = new DatabaseAccess("C:/Users/jaras/Desktop/ENSF409/Hackathon","scm","ensf409");
+        this.databaseObj = new DatabaseAccess("jdbc:mysql://localhost/inventory","madeline","ensf409");
+        databaseObj.initializeConnection();
         printMenu();
+        databaseObj.close();
     }
 
     /**
@@ -77,15 +85,26 @@ public class Menu {
                 //case 1 is used to obtain user input to initialize category
                 case 1:
                     while(notValidInput){
-                        System.out.print("\n1) Enter the furniture category from the following options (or input q to quit): ");
+                        System.out.println("\n1) Enter the furniture category from the following options (or input q to quit): ");
 
                          //print out options available
                          ArrayList<String> catOptions = databaseObj.fetchTables();
+
                          int i = 0;
                          for(i = 0; i < catOptions.size()-1;i++){
-                             System.out.print(catOptions.get(i)+", ");
+                             //manufacturer is not a valid choice
+                             if(!catOptions.get(i).equals("manufacturer")){
+                                System.out.print(catOptions.get(i)+", ");
+                             }
+
                          }
-                         System.out.print(catOptions.get(i));
+                         //manufacturer is not a valid choice
+                         if(!catOptions.get(i).equals("manufacturer")){
+                             System.out.print(catOptions.get(i) + ": ");
+                         }
+                         else{
+                             System.out.print(": ");
+                         }
 
                          //read in user input
                         this.category = inputObj.nextLine();
@@ -95,6 +114,12 @@ public class Menu {
                             quitControl = false;
                             break;
                         }
+                        //check if user inputted manufacturer beacuse it is a part of the database but not a valid category
+                        if(category.equals("manufacturer")){
+                            quitControl = false;
+                            break;
+                        }
+
                         //check is input is valid
                         notValidInput = checkNotValidInput(1,category);
                     }
@@ -104,8 +129,9 @@ public class Menu {
                 
                 //case 2 is used to obtain user input to initialize type
                 case 2:    
+                    boolean goBack = false;
                     while(notValidInput){
-                        System.out.println("Input ^ to navigate back to category entry if you need to change your category input. Otherwise,");
+                        System.out.println("\nInput ^ to navigate back to category entry if you need to change your category input. Otherwise,");
                         System.out.println("2) Enter the furniture type from the following options (or input q to quit): ");
 
                         //print out options available
@@ -114,17 +140,17 @@ public class Menu {
                         for(i = 0; i < typeOptions.size()-1;i++){
                             System.out.print(typeOptions.get(i)+", ");
                         }
-                        System.out.print(typeOptions.get(i));
+                        System.out.print(typeOptions.get(i) + ": ");
                         
                         //read in user input
                         this.type = inputObj.nextLine();
 
                         //check if user inputted quit key or navigate up key
-                        if(category.equals("^")){
-                            menuControl = 1;
+                        if(type.equals("^")){
+                            goBack = true;
                             break;
                         }
-                        if(category.equals("q")){
+                        if(type.equals("q")){
                             quitControl = false;
                             break;
                         }
@@ -133,24 +159,29 @@ public class Menu {
                         notValidInput = checkNotValidInput(2,type);
                     }
                     notValidInput = true;
-                    menuControl = 3;
+                    if(goBack){
+                        menuControl = 1;
+                    }else{
+                        menuControl = 3;
+                    }
                     break;
 
                 //case 3 is used to obtain user input to initialize numberOfItems    
-                case 3:    
+                case 3:
+                    boolean goB = false;    
                     while(notValidInput){
-                        System.out.println("Input ^ to navigate back to type entry if you need to change your type input. Otherwise,");
-                        System.out.print("\n3) Enter the amount of items (or input q to quit): ");
+                        System.out.println("\nInput ^ to navigate back to type entry if you need to change your type input. Otherwise,");
+                        System.out.println("3) Enter the amount of items (or input q to quit): ");
 
                         //read in user input
                         this.numberOfItems = inputObj.nextLine();
 
                         //check if user inputted quit key or navigate up key
                         if(numberOfItems.equals("^")){
-                            menuControl = 2;
+                            goB = true;
                             break;
                         }
-                        if(category.equals("q")){
+                        if(numberOfItems.equals("q")){
                             quitControl = false;
                             break;
                         }
@@ -158,7 +189,12 @@ public class Menu {
                         //check if input is valid
                         notValidInput = checkNotValidInput(3,numberOfItems);
                     }
-                    menuControl = 4;
+                    notValidInput = true;
+                    if(goB){
+                        menuControl = 2;
+                    }else{
+                        menuControl = 4;
+                    }
                     break;
                 
                 //case 4 is used once category, type, and numberOfItems have been initialized to call obtainOutputMessage and then finish the program
@@ -168,6 +204,7 @@ public class Menu {
                     break;
             }
         }
+        inputObj.close();
         
     }
 
@@ -223,12 +260,14 @@ public class Menu {
                         return true;
                     }
                     return false;
-                    break;
 
                 }catch(NumberFormatException e){
                     System.out.println("Please enter a valid number of items to be ordered.");
                     return true;
                 }
+            
+            default:
+                return false;
         }
 
     }
@@ -241,6 +280,48 @@ public class Menu {
         this.searchInventoryObj = new SearchInventory(category,type,Integer.parseInt(numberOfItems),databaseObj);
             //call method here to search the database for the furniture-> should return true if could generate furniture and false if request is impossible
             //use getter to see if request failed or not a call a file depending off it fails
+            if(!searchInventoryObj.getOrderFound()){
+                
+                //if here it means that the request could not be fulfilled so print out a message and return
+                System.out.println("Order cannot be fulfilled based on current inventory. Suggested manufacturers are ");
+                
+                //print out the suggested manufacturers
+                ArrayList<String> manuIdArray = databaseObj.fetchManufacturerName(category);
+                int j = 0;
+                for(j = 0; j < manuIdArray.size()-2; j++){
+                    if(j == manuIdArray.size()-2){
+                        // at second last id
+                        System.out.print(manuIdArray.get(j) + "and ");
+                    }
+                    else{
+                        System.out.print(manuIdArray.get(j) + ", ");
+                    }
+                }
+                //at last index of manuIdArray
+                System.out.print(manuIdArray.get(j) + ".");
+            }
+            else{
+                //if here it means that the request could be fulfilled so want to write a text file and print what ids to order and the price of the order
+                writeTextObj = new WriteText(category, type, numberOfItems, searchInventoryObj.getBestOrder().getIDs(), String.valueOf(searchInventoryObj.getBestOrder().getCost()));
+                writeTextObj.writeOutput();
+
+                //print out ids of order and the price
+                String[] idArray = searchInventoryObj.getBestOrder().getIDs();
+                int i = 0;
+                System.out.println("Purchase ");
+
+                for(i = 0; i < idArray.length-1; i++){
+                    if(i == idArray.length-2){
+                        //at second last id
+                        System.out.print(idArray[i]+" and ");
+                    }
+                    else{
+                        System.out.print(idArray[i]+", ");
+                    }
+                }
+                //at last index of idArray
+                System.out.print(idArray[i]+" for " + searchInventoryObj.getBestOrder().getCost() + ".");
+            }
     }
 
 }
