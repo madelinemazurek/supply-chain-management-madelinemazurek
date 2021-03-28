@@ -1,15 +1,42 @@
+/**
+*@author     Madeline Mazurek <a href="mailto:madeline.mazurek@ucalgary.ca">madeline.mazurek@ucalgary.ca</a> 
+*@author     Jared Assen <a href="mailto:jared.assen@ucalgary.ca">jared.assen@ucalgary.ca</a> 
+*@author     Ethan Card <a href="mailto:michael.card@ucalgary.ca">michael.card@ucalgary.ca</a> 
+*@author     Tyler Thain <a href="mailto:tyler.thain@ucalgary.ca">tyler.thain@ucalgary.ca</a> 
+*@version    1.5
+*@since      1.0
+*/
+
 package edu.ucalgary.ensf409;
 import java.util.*;
 
+/**
+ * SearchInventory Class revieves the user input for a requested order
+ *  (furnitureCategory, model, numItems), and searches the database for the cheapest way to
+ *  complete this order. After searching, the fields for bestOrder and orderFound will be initialized,
+ *  reflecting what the best possible order is (if one exists) and if completing an order is posiible at
+ *  all given the current database and the requested order.
+ */
 public class SearchInventory <T> {
-    private String furnitureCategory; //table to be searched
+    private String furnitureCategory; //table in database to be searched
     private int numItems; //number of items that the order must fulfill
 
-    private ArrayList<T> items = new ArrayList<>(); //array of all items of model type in inventory
-    private ArrayList <Order<FurnitureItem>> allOrders = new ArrayList<>(); //all possible orders that satisfy requirements
+    private ArrayList<T> items = new ArrayList<>(); //array of all items of model type in the current inventory
+    private ArrayList <Order<FurnitureItem>> allOrders = new ArrayList<>(); //array of all possible orders that satisfy requirements
+                                                                            //not considering cost, simply every possible order
     private Order<FurnitureItem> bestOrder; //the cheapest order that satisfies the requirements
     private boolean orderFound = false; // true if an order can be fulfilled, false otherwise
 
+    /**
+     * SearchInventory constructor recieves all information for a requested order (furnitureCategory, model, numItems),
+     *  as well as the DatabaseAccess object that is used to retrieve the desired information from the database.
+     *  Initializes all fields by calling generateAllSets() and selectBestOrder(), which initialize the bestOrder and
+     *  orderFound fields after performing their desired functionality.
+     * @param furnitureCategory Table in database to be searched.
+     * @param model Type of FurnitureItem to be searched for.
+     * @param numItems Number of items that the order must fulfill.
+     * @param db DatabaseAccess object used to access the database.
+     */
     public SearchInventory (String furnitureCategory, String model, int numItems, DatabaseAccess db) {
         this.furnitureCategory = furnitureCategory;
         this.numItems = numItems;
@@ -59,7 +86,7 @@ public class SearchInventory <T> {
     }
 
     //method checkValidSet returns void
-    //calls check_____Set
+    //calls check_____Set based on which type of FurnitureItem is requested
     //if check______Set returns true, create order for set and add order to allOrders
     private <T> void checkValidSet(ArrayList<T> subset) {
         if(furnitureCategory.toLowerCase().equals("chair")) {
@@ -85,6 +112,11 @@ public class SearchInventory <T> {
         }
     }
 
+    /**
+     * Checks through the chair subset, seing if there are enough instances 
+     *  of each individual field (each type of component) in order for this subset 
+     *  to be a complete order.
+     */
     private boolean checkChairSet(Chair[] subset){ 
         int numLegs = 0;
         int numArms = 0;
