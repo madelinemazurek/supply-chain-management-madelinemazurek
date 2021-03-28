@@ -64,22 +64,22 @@ public class SearchInventory <T> {
     private <T> void checkValidSet(ArrayList<T> subset) {
         if(furnitureCategory.toLowerCase().equals("chair")) {
             if(checkChairSet((Chair[])subset.toArray()) == true) {
-                Order theOrder = new Order((Chair[])subset.toArray());
+                Order theOrder = new Order(subset);
                 allOrders.add(theOrder);
             }
         } else if(furnitureCategory.toLowerCase().equals("desk")) {
             if(checkDeskSet((Desk[])subset.toArray()) == true) {
-                Order theOrder = new Order((Desk[])subset.toArray());
+                Order theOrder = new Order(subset);
                 allOrders.add(theOrder);
             }
         } else if(furnitureCategory.toLowerCase().equals("filing")) {
             if(checkFilingSet((Filing[])subset.toArray()) == true) {
-                Order theOrder = new Order((Filing[])subset.toArray());
+                Order theOrder = new Order(subset);
                 allOrders.add(theOrder);
             }
         } else if(furnitureCategory.toLowerCase().equals("lamp")) {
             if(checkLampSet((Lamp[])subset.toArray()) == true) {
-                Order theOrder = new Order((Lamp[])subset.toArray());
+                Order theOrder = new Order(subset);
                 allOrders.add(theOrder);
             }
         }

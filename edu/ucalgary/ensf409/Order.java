@@ -2,8 +2,8 @@ package edu.ucalgary.ensf409;
 
 import java.util.ArrayList;
 
-public class Order{
-    private Chair[] chairs;
+public class Order <T> {
+    /*private Chair[] chairs;
     private Desk[] desks;
     private Filing[] filingCabinets;
     private Lamp[] lamps;
@@ -11,9 +11,38 @@ public class Order{
     private boolean isDesk = false;
     private boolean isFiling = false;
     private boolean isLamp = false;
+    private int cost = 0;*/
+
+    private ArrayList<T> items;
     private int cost = 0;
 
     //initialize Chair array and indicate the furniture type. Calc cost
+    public Order(ArrayList<T> items){
+        this.items = items;
+        calculateCost();
+    }
+
+    public int getCost(){
+        return this.cost;
+    }
+
+    public String[] getIDs(){
+        ArrayList<String> retString = new ArrayList<>();
+
+        for(int i = 0; i < this.items.size(); i++) {
+            retString.add(((FurnitureItem)this.items.get(i)).getID());
+        }
+
+        return (String[]) retString.toArray();
+    }
+
+    public void calculateCost(){
+        for(int i = 0; i < this.items.size(); i++){
+            this.cost += ((FurnitureItem)this.items.get(i)).getPrice();
+        }
+    }
+
+    /*//initialize Chair array and indicate the furniture type. Calc cost
     public Order(Chair[] chairs){
         this.chairs = chairs;
         this.isChair = true;
@@ -39,11 +68,7 @@ public class Order{
         this.lamps = lamps;
         this.isLamp = true;
         calculateCost();
-    }
-
-    public int getCost(){
-        return this.cost;
-    }
+    }*/
 
     // public boolean getIsChair(){
     //     return this.isChair;
@@ -77,7 +102,7 @@ public class Order{
     //     return this.lamps;
     // }
 
-    public String[] getIDs(){
+    /*public String[] getIDs(){
         ArrayList<String> retString = new ArrayList<>();
         if(isChair){
             for(int i = 0; i < this.chairs.length; i++){
@@ -101,9 +126,9 @@ public class Order{
         }
 
         return (String[]) retString.toArray();
-    }
+    }*/
 
-    public void calculateCost(){
+    /*public void calculateCost(){
         //if furniture type is chair, add up cost of all items in list
         if(this.isChair){
             for(int i = 0; i < this.chairs.length; i++){
@@ -128,5 +153,5 @@ public class Order{
                 this.cost += this.lamps[i].getPrice();
             }
         }
-    }
+    }*/
 }
