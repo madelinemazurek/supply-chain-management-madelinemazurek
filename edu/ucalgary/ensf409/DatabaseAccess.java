@@ -1,17 +1,48 @@
+/**
+    @author     Madeline Mazurek <a href="mailto:madeline.mazurek@ucalgary.ca">madeline.mazurek@ucalgary.ca</a> 
+    @author     Jared Assen <a href="mailto:jared.assen@ucalgary.ca">jared.assen@ucalgary.ca</a> 
+    @author     Ethan Card <a href="mailto:michael.card@ucalgary.ca">michael.card@ucalgary.ca</a> 
+    @author     Tyler Thain <a href="mailto:tyler.thain@ucalgary.ca">tyler.thain@ucalgary.ca</a> 
+    @version    1.6
+    @since      1.0
+ */
 package edu.ucalgary.ensf409;
 import java.sql.*;
 import java.util.*;
+/**
+ * DatabaseAccess class has 5 fields all used for database access and manipulation of sql files. 
+ * It has a variety of methods which will be used to pass relevant information on specific tables in 
+ * the database to calling functions. This class also contains a method to delete values from tables in
+ * the database.
+ */
 public class DatabaseAccess{
     public final String DBURL;
     public final String USERNAME;
     public final String PASSWORD;
     private Connection dbConnect;
     private ResultSet results;
+    /**
+     * DatabaseAccess constructor. Takes in parameters for three fields and initializes
+     * the member variables. 
+     * @param dburl
+     * @param username
+     * @param password
+     */
     public DatabaseAccess(String dburl, String username, String password){
         this.DBURL = dburl;
         this.USERNAME = username;
         this.PASSWORD = password;
     }
+    /**
+     * Getter for DBURL
+     * @return A string for the DBURL member
+     */
+    public String getDburl(){
+        return this.DBURL;
+    }
+    /**
+     *  intitalizeConnection is a method that should initialize the Connection member variable dbConnect.
+     */
     public void initializeConnection(){
         try{
             dbConnect = DriverManager.getConnection(DBURL, USERNAME, PASSWORD);
@@ -19,6 +50,11 @@ public class DatabaseAccess{
             System.err.println("Could not connect to the database");
         }
     }
+    /**
+     * fetchTables is a method that will get all table names from the database in an sql file, 
+     * and return them in an ArrayList of type String.
+     * @return ArrayList of type String containing table names.
+     */
     public ArrayList<String> fetchTables(){
         ArrayList <String> tableString = new ArrayList<String>();
         try{
@@ -34,6 +70,12 @@ public class DatabaseAccess{
         }
         return tableString;
     }
+    /**
+     * fetchColumns is a method that recieves one argument, this being the table name and returns an ArrayList
+     * of type string containing the names of all columns in a table found in a database.
+     * @param table
+     * @return ArrayList of type string containing the names of all columns in a table found in a database.
+     */
     public ArrayList<String> fetchColumns(String table){
         ArrayList <String> typeString = new ArrayList<String>();
         try{
@@ -51,6 +93,9 @@ public class DatabaseAccess{
         }
         return typeString;
     }
+    /**
+     * close is a method that closes the Connection field dbConnect, and ResultSet results.
+     */
     public void close(){
         try{
             results.close();
@@ -60,6 +105,12 @@ public class DatabaseAccess{
             System.err.println("Could not fully close");
         }
     }
+    /**
+     * fetchTypes is a method that recieves one argument a String representing the table name 
+     * and returns an ArrayList of type string containg each unique type found in a table within the database
+     * @param table
+     * @return ArrayList of type string containg each unique type found in a table within the database
+     */
     public ArrayList<String> fetchTypes(String table){
         ArrayList <String> typeString = new ArrayList<String>();
         try{
@@ -77,6 +128,12 @@ public class DatabaseAccess{
         }
         return typeString;
     }
+    /**
+     * fetchManufacturerName is a method that recieves one argument a String representing a table name,
+     * and returns an ArrayList of type String containing each unique manufacturer name found within a table in the database.
+     * @param table
+     * @return ArrayList of type String containing each unique manufacturer name found within a table in the database.
+     */
     public ArrayList<String> fetchManufacturerName(String table){
         ArrayList <String> manufacturerID = new ArrayList<String>();
         try{
@@ -108,6 +165,14 @@ public class DatabaseAccess{
         }
         return manufacturerName;
     }
+    /**
+     * fetchSpecificType is a method that recieves two arguments one string representing a table name and one representing a type name.
+     * The method will then find every row in the specified table within the database containing the type specified in the arguments. 
+     * These rows will then be returned in the form of an ArrayList of type String.
+     * @param table
+     * @param type
+     * @return ArrayList of type string containing valid rows with a type matching argument type.
+     */
     public ArrayList<String> fetchSpecificType(String table, String type){
         ArrayList <String> columns = fetchColumns(table);
         ArrayList<String> validArray = new ArrayList<String>();
@@ -135,6 +200,14 @@ public class DatabaseAccess{
         }
         return validArray;
     }
+    /**
+     * Method that takes in two arguments a String representing a table name and a String representing a type within the table.
+     * The method will construct a generic array and return it. This generic array will be generated by typecasting specific objects. 
+     * @param <T>
+     * @param table
+     * @param type
+     * @return Generic array of objects 
+     */
     public <T> T[] objectConstructor(String table, String type){
         ArrayList<String> validRows = fetchSpecificType(table, type);
         if(table.equals("chair")){
@@ -206,6 +279,11 @@ public class DatabaseAccess{
             return empty;
         }
     }
+    /**
+     * Takes in two string args and deletes a specific row from the table.
+     * @param table
+     * @param id
+     */
     public void deleteFromTable(String table, String[] id){
         for (int i =0; i<id.length;i++){
             try{
