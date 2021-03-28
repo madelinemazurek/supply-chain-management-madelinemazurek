@@ -15,7 +15,7 @@ public class Menu {
     private String type;
     private String numberOfItems;
 
-    private DatabaseAccess dataBaseObj;
+    private DatabaseAccess databaseObj;
     private SearchInventory searchInventoryObj;
     private WriteText writeTextObj;
 
@@ -23,7 +23,7 @@ public class Menu {
      * Default constructor that will initialize dataBaseObj and call printMenu() to start the user input process which will initialize the other data members
      */
     public Menu(){
-        this.dataBaseObj = new dataBaseObj("C:/Users/jaras/Desktop/ENSF409/Hackathon","scm","ensf409");
+        this.databaseObj = new DatabaseAccess("C:/Users/jaras/Desktop/ENSF409/Hackathon","scm","ensf409");
         printMenu();
     }
 
@@ -80,18 +80,18 @@ public class Menu {
                         System.out.print("\n1) Enter the furniture category from the following options (or input q to quit): ");
 
                          //print out options available
-                         String[] catOptions = dataBaseObj.fetchTables();
+                         ArrayList<String> catOptions = databaseObj.fetchTables();
                          int i = 0;
-                         for(i = 0; i < catOptions.length-1;i++){
-                             System.out.print(catOptions[i]+", ");
+                         for(i = 0; i < catOptions.size()-1;i++){
+                             System.out.print(catOptions.get(i)+", ");
                          }
-                         System.out.print(catOptions[i]);
+                         System.out.print(catOptions.get(i));
 
                          //read in user input
                         this.category = inputObj.nextLine();
 
                         //check if user inputted quit key
-                        if(category = "q"){
+                        if(category.equals("q")){
                             quitControl = false;
                             break;
                         }
@@ -109,22 +109,22 @@ public class Menu {
                         System.out.println("2) Enter the furniture type from the following options (or input q to quit): ");
 
                         //print out options available
-                        String[] typeOptions = dataBaseObj.fetchTypes(category);
+                        ArrayList<String> typeOptions = databaseObj.fetchTypes(category);
                         int i = 0;
-                        for(i = 0; i < typeOptions.length-1;i++){
-                            System.out.print(typeOptions[i]+", ");
+                        for(i = 0; i < typeOptions.size()-1;i++){
+                            System.out.print(typeOptions.get(i)+", ");
                         }
-                        System.out.print(typeOptions[i]);
+                        System.out.print(typeOptions.get(i));
                         
                         //read in user input
                         this.type = inputObj.nextLine();
 
                         //check if user inputted quit key or navigate up key
-                        if(category = "^"){
+                        if(category.equals("^")){
                             menuControl = 1;
                             break;
                         }
-                        if(category = "q"){
+                        if(category.equals("q")){
                             quitControl = false;
                             break;
                         }
@@ -146,11 +146,11 @@ public class Menu {
                         this.numberOfItems = inputObj.nextLine();
 
                         //check if user inputted quit key or navigate up key
-                        if(numberOfItems = "^"){
+                        if(numberOfItems.equals("^")){
                             menuControl = 2;
                             break;
                         }
-                        if(category = "q"){
+                        if(category.equals("q")){
                             quitControl = false;
                             break;
                         }
@@ -195,8 +195,8 @@ public class Menu {
 
             //check if category inputted is valid by comparing it to a list of table names in the database 
             case 1: 
-                ArrayList<String> categories = dataBaseObj.fetchTables();
-                for(int j = 0; j < categories.length;j++){
+                ArrayList<String> categories = databaseObj.fetchTables();
+                for(int j = 0; j < categories.size();j++){
                     if(input.equals(categories.get(j))){
                         return false;
                     }
@@ -206,8 +206,8 @@ public class Menu {
 
             // will only get here if category entered is correct so already know what table we are in -> use this info to check if valid type for the category    
             case 2:
-                ArrayList<String> types = dataBaseObj.fetchTypes(category);
-                for(int j = 0; j < types.length;j++){
+                ArrayList<String> types = databaseObj.fetchTypes(category);
+                for(int j = 0; j < types.size();j++){
                     if(input.equals(types.get(j))){
                         return false;
                     }
@@ -217,7 +217,7 @@ public class Menu {
 
             case 3:
                 try{
-                    int inputAmount = Integer.ParseInt(input);
+                    int inputAmount = Integer.parseInt(input);
                     if(inputAmount<1){
                         System.out.println("Please enter a valid number of items to be ordered.");
                         return true;
@@ -238,7 +238,7 @@ public class Menu {
      * 
      */
     private void obtainOutputMessage(){
-        this.searchInventoryObj = new SearchInventory(category,type,Integer.parseInt(numberOfItems),dataBaseObj);
+        this.searchInventoryObj = new SearchInventory(category,type,Integer.parseInt(numberOfItems),databaseObj);
             //call method here to search the database for the furniture-> should return true if could generate furniture and false if request is impossible
             //use getter to see if request failed or not a call a file depending off it fails
     }
