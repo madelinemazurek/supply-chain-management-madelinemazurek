@@ -2,9 +2,12 @@
 // make it so navigation doesn't delete  previous entries
 // make it so can check over entries before submiting form request
 
+//*********************** for category check manufacturer is valid input --> should not be!!!!!!!!!!!!!!!!1
+
 package edu.ucalgary.ensf409;
 
 import java.util.Scanner;
+import java.util.ArrayList;
 
 public class Menu {
 
@@ -12,15 +15,15 @@ public class Menu {
     private String type;
     private String numberOfItems;
 
-    private DataBaseAccess dataBaseObj;
-    private CreateFurniture furnitureCreationObj;
+    private DatabaseAccess dataBaseObj;
+    private SearchInventory searchInventoryObj;
     private WriteText writeTextObj;
 
     /**
      * Default constructor that will initialize dataBaseObj and call printMenu() to start the user input process which will initialize the other data members
      */
     public Menu(){
-        this.dataBaseObj = new dataBaseObj("C:/Users/jaras/Desktop/ENSF409/Hackathon","JaredA","Blackfoot69.");
+        this.dataBaseObj = new dataBaseObj("C:/Users/jaras/Desktop/ENSF409/Hackathon","scm","ensf409");
         printMenu();
     }
 
@@ -29,7 +32,7 @@ public class Menu {
      * @return the category of furniture
      */
     public String getCategory(){
-        return this. category;
+        return this.category;
     }
 
     /**
@@ -49,10 +52,12 @@ public class Menu {
     }
     
     /**
-     * Prints the menu to the terminal and prompts users for input to initialize the category, type, and numberOfItems data members
+     * Prints the menu to the terminal and prompts users for input to initialize the category, type, and numberOfItems data members.
+     * Valid input is checked for with a call to checkNotValidInput.
      * Has added fucntionality to allow users to quit the process at any time or navigate back up the menu to change a previous entry.
+     * Once the user input has been read in for category, type, and numberOfItems, obtainFinalMessage() is called bdefore the method finishes
      */
-    public void printMenu(){
+    private void printMenu(){
 
         Scanner inputObj = new Scanner(System.in);
 
@@ -69,6 +74,7 @@ public class Menu {
         while(quitControl){
             switch(menuControl){
 
+                //case 1 is used to obtain user input to initialize category
                 case 1:
                     while(notValidInput){
                         System.out.print("\n1) Enter the furniture category from the following options (or input q to quit): ");
@@ -81,17 +87,22 @@ public class Menu {
                          }
                          System.out.print(catOptions[i]);
 
+                         //read in user input
                         this.category = inputObj.nextLine();
+
+                        //check if user inputted quit key
                         if(category = "q"){
                             quitControl = false;
                             break;
                         }
+                        //check is input is valid
                         notValidInput = checkNotValidInput(1,category);
                     }
                     notValidInput=true;
                     menuControl=2;
                     break;
-
+                
+                //case 2 is used to obtain user input to initialize type
                 case 2:    
                     while(notValidInput){
                         System.out.println("Input ^ to navigate back to category entry if you need to change your category input. Otherwise,");
@@ -104,8 +115,11 @@ public class Menu {
                             System.out.print(typeOptions[i]+", ");
                         }
                         System.out.print(typeOptions[i]);
-        
+                        
+                        //read in user input
                         this.type = inputObj.nextLine();
+
+                        //check if user inputted quit key or navigate up key
                         if(category = "^"){
                             menuControl = 1;
                             break;
@@ -114,19 +128,24 @@ public class Menu {
                             quitControl = false;
                             break;
                         }
+
+                        //check if input is valid
                         notValidInput = checkNotValidInput(2,type);
                     }
                     notValidInput = true;
                     menuControl = 3;
                     break;
 
+                //case 3 is used to obtain user input to initialize numberOfItems    
                 case 3:    
                     while(notValidInput){
                         System.out.println("Input ^ to navigate back to type entry if you need to change your type input. Otherwise,");
                         System.out.print("\n3) Enter the amount of items (or input q to quit): ");
 
+                        //read in user input
                         this.numberOfItems = inputObj.nextLine();
 
+                        //check if user inputted quit key or navigate up key
                         if(numberOfItems = "^"){
                             menuControl = 2;
                             break;
@@ -135,11 +154,14 @@ public class Menu {
                             quitControl = false;
                             break;
                         }
+
+                        //check if input is valid
                         notValidInput = checkNotValidInput(3,numberOfItems);
                     }
                     menuControl = 4;
                     break;
                 
+                //case 4 is used once category, type, and numberOfItems have been initialized to call obtainOutputMessage and then finish the program
                 case 4:
                     obtainOutputMessage();
                     quitControl = false;
@@ -150,15 +172,32 @@ public class Menu {
     }
 
     //check against dataBase to see if type and category are there
+
+    /**
+     * 
+     * @param i specifies what check to carry out on input
+     * @param input is the String read in from the user input.
+     * @return false if input is valid and true if input is not valid.
+     * 
+     * To check valid input for category a 1 is passed for i. 
+     * input is then compared to the table names in the database and if a match is found the input is considered valid.
+     * 
+     * To check valid input for type a 2 is passed for i.
+     * input is then compared to the names of the type column in the table that has previously been initialized in printMenu() (cannot get to this point without having already
+     * provided a proper category/table name). If a match is found the input is considered valid.
+     * 
+     * To check valid input for numberOfItems a 3 is passed for i.
+     * input is then converted to an int and as long as it converts to an int that is greater than 0 it is valid. If it cannot be converted the input is considered invalid.
+     */
     private boolean checkNotValidInput(int i,String input){
 
         switch(i){
 
             //check if category inputted is valid by comparing it to a list of table names in the database 
             case 1: 
-                String[] categories = dataBaseObj.fetchTables();
+                ArrayList<String> categories = dataBaseObj.fetchTables();
                 for(int j = 0; j < categories.length;j++){
-                    if(input = categories[j]){
+                    if(input.equals(categories.get(j))){
                         return false;
                     }
                 }
@@ -167,9 +206,9 @@ public class Menu {
 
             // will only get here if category entered is correct so already know what table we are in -> use this info to check if valid type for the category    
             case 2:
-                String[] types = dataBaseObj.fetchTypes(category);
+                ArrayList<String> types = dataBaseObj.fetchTypes(category);
                 for(int j = 0; j < types.length;j++){
-                    if(input = types[j]){
+                    if(input.equals(types.get(j))){
                         return false;
                     }
                 }
@@ -177,13 +216,19 @@ public class Menu {
                 return true;
 
             case 3:
-                int inputAmount = Integer.ParseInt(input);
-                if(inputAmount<1){
+                try{
+                    int inputAmount = Integer.ParseInt(input);
+                    if(inputAmount<1){
+                        System.out.println("Please enter a valid number of items to be ordered.");
+                        return true;
+                    }
+                    return false;
+                    break;
+
+                }catch(NumberFormatException e){
                     System.out.println("Please enter a valid number of items to be ordered.");
                     return true;
                 }
-                return false;
-                break;
         }
 
     }
@@ -193,8 +238,9 @@ public class Menu {
      * 
      */
     private void obtainOutputMessage(){
-        this.furnitureCreationObj = new CreateFurniture(category,type,Integer.parseInt(numberOfItems));
-        
+        this.searchInventoryObj = new SearchInventory(category,type,Integer.parseInt(numberOfItems),dataBaseObj);
+            //call method here to search the database for the furniture-> should return true if could generate furniture and false if request is impossible
+            //use getter to see if request failed or not a call a file depending off it fails
     }
 
 }
