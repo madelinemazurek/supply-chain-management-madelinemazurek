@@ -219,10 +219,17 @@ public class DatabaseAccess{
             return empty;
         }
     }
-    public static void main(String[] args){
-        DatabaseAccess test = new DatabaseAccess("jdbc:mysql://localhost/inventory", "ethan", "Roxanne3");
-        test.initializeConnection();
-        ArrayList<String> cool = test.fetchTables();
-        System.out.println(cool);
+    public void deleteFromTable(String table, String[] id){
+        for (int i =0; i<id.length;i++){
+            try{
+            String query = "DELETE FROM ? WHERE ManuID = ?";
+            PreparedStatement myStmt = dbConnect.prepareStatement(query);
+            myStmt.setString(1,table);
+            myStmt.setString(2,id[i]);
+            myStmt.close();
+            } catch(SQLException e){
+                System.err.println("Could not execute query");
+            }
+        }  
     }
 }
