@@ -15,7 +15,10 @@ public class SearchInventory <T> {
         this.numItems = numItems;
 
         //call databaseAccess method to initialize items array
-        items = db.objectConstructor(furnitureCategory, model);
+        T[] tempArray = db.objectConstructor(furnitureCategory, model);
+        for(int i = 0; i < tempArray.length; i++){
+            this.items.add(tempArray[i]);
+        }
 
         generateAllSets();
         selectBestOrder();

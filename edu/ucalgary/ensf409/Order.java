@@ -1,5 +1,7 @@
 package edu.ucalgary.ensf409;
 
+import java.util.ArrayList;
+
 public class Order{
     private Chair[] chairs;
     private Desk[] desks;
@@ -41,6 +43,64 @@ public class Order{
 
     public int getCost(){
         return this.cost;
+    }
+
+    // public boolean getIsChair(){
+    //     return this.isChair;
+    // }
+
+    // public boolean getIsDesk(){
+    //     return this.isDesk;
+    // }
+
+    // public boolean getIsFiling(){
+    //     return this.isFiling;
+    // }
+
+    // public boolean getIsLamp(){
+    //     return this.isLamp;
+    // }
+
+    // public Chair[] getChairs() {
+    //     return this.chairs;
+    // }
+
+    // public Desk[] getDesks() {
+    //     return this.desks;
+    // }
+
+    // public Filing[] getFilingCabinets() {
+    //     return this.filingCabinets;
+    // }
+
+    // public Lamp[] getLamps() {
+    //     return this.lamps;
+    // }
+
+    public String[] getIDs(){
+        ArrayList<String> retString = new ArrayList<>();
+        if(isChair){
+            for(int i = 0; i < this.chairs.length; i++){
+                retString.add(this.chairs[i].getID());
+            }
+        }
+        else if(isDesk){
+            for(int i = 0; i < this.desks.length; i++){
+                retString.add(this.desks[i].getID());
+            }
+        }
+        else if(isFiling){
+            for(int i = 0; i < this.filingCabinets.length; i++){
+                retString.add(this.filingCabinets[i].getID());
+            }
+        }
+        else if(isLamp){
+            for(int i = 0; i < this.lamps.length; i++){
+                retString.add(this.lamps[i].getID());
+            }
+        }
+
+        return (String[]) retString.toArray();
     }
 
     public void calculateCost(){
