@@ -6,7 +6,6 @@ public class DatabaseAccess{
     public final String USERNAME;
     public final String PASSWORD;
     private Connection dbConnect;
-    private DatabaseMetaData dMD; 
     private ResultSet results;
     public DatabaseAccess(String dburl, String username, String password){
         this.DBURL = dburl;
