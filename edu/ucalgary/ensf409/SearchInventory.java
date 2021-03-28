@@ -26,7 +26,7 @@ public class SearchInventory {
     //public void generateAllSets()
 
         //applicableTableRows is what is returned from databaseAccess class and contains the reduced table which only includes the rows with the right type
-        public <T> void generateAllSets(){
+        private <T> void generateAllSets(){
 
             //n is the total number of subsets (2^n)
             int n = (int) Math.pow(2,items.length);
