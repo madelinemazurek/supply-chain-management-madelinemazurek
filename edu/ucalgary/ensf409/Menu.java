@@ -1,11 +1,3 @@
-//to do:
-// make it so navigation doesn't delete  previous entries
-// make it so can check over entries before submiting form request
-
-//WHAT DO I PASS TO DATABASE CONSTRUCTOR???????????????????????????????
-
-//DOCUMENT
-
 package edu.ucalgary.ensf409;
 
 import java.util.Scanner;
@@ -29,7 +21,7 @@ public class Menu {
      * Default constructor that will initialize dataBaseObj and call printMenu() to start the user input process which will initialize the other data members
      */
     public Menu(){
-        this.databaseObj = new DatabaseAccess("jdbc:mysql://localhost/inventory","madeline","ensf409");
+        this.databaseObj = new DatabaseAccess("jdbc:mysql://localhost/inventory","scm","ensf409");
         databaseObj.initializeConnection();
         printMenu();
         databaseObj.close();
@@ -91,7 +83,7 @@ public class Menu {
                          ArrayList<String> catOptions = databaseObj.fetchTables();
 
                          int i = 0;
-                         for(i = 0; i < catOptions.size()-1;i++){
+                         for(i = 0; i < catOptions.size()-2;i++){
                              //manufacturer is not a valid choice
                              if(!catOptions.get(i).equals("manufacturer")){
                                 System.out.print(catOptions.get(i)+", ");
@@ -305,6 +297,9 @@ public class Menu {
                 writeTextObj = new WriteText(category, type, numberOfItems, searchInventoryObj.getBestOrder().getIDs(), String.valueOf(searchInventoryObj.getBestOrder().getCost()));
                 writeTextObj.writeOutput();
 
+                //delete the items from the inventory --> pass tbale name and ids
+                databaseObj.deleteFromTable(category, searchInventoryObj.getBestOrder().getIDs());
+
                 //print out ids of order and the price
                 String[] idArray = searchInventoryObj.getBestOrder().getIDs();
                 int i = 0;
@@ -320,7 +315,7 @@ public class Menu {
                     }
                 }
                 //at last index of idArray
-                System.out.print(idArray[i]+" for " + searchInventoryObj.getBestOrder().getCost() + ".");
+                System.out.print(idArray[i]+" for $" + searchInventoryObj.getBestOrder().getCost() + ".");
             }
     }
 
