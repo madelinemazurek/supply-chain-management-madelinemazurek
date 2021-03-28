@@ -20,18 +20,6 @@ public class DatabaseAccess{
             System.err.println("Could not connect to the database");
         }
     }
-    public void deleteFromTable(String table, String id){
-        try{
-            String query = "DELETE FROM ? WHERE ID = ?";
-            PreparedStatement myStmt = dbConnect.prepareStatement(query);
-            myStmt.setString(1,table);
-            myStmt.setString(2,id);
-            myStmt.executeUpdate();
-            myStmt.close();
-        } catch(SQLException e){
-            System.err.println("Couldn't execute query");
-        }
-    }
     public ArrayList<String> fetchTables(){
         ArrayList <String> tableString = new ArrayList<String>();
         try{
@@ -218,5 +206,18 @@ public class DatabaseAccess{
             T[] empty = null;
             return empty;
         }
+    }
+    public void deleteFromTable(String table, String[] id){
+        for (int i =0; i<id.length;i++){
+            try{
+            String query = "DELETE FROM  " + table + " WHERE ID = ?";
+            PreparedStatement myStmt = dbConnect.prepareStatement(query);
+            myStmt.setString(1,id[i]);
+            myStmt.executeUpdate();
+            myStmt.close();
+            } catch(SQLException e){
+                System.err.println("Could not execute query");
+            }
+        }  
     }
 }
