@@ -6,6 +6,7 @@ public class DatabaseAccess{
     public final String USERNAME;
     public final String PASSWORD;
     private Connection dbConnect;
+    private DatabaseMetaData dMD; 
     private ResultSet results;
     public DatabaseAccess(String dburl, String username, String password){
         this.DBURL = dburl;
@@ -34,32 +35,157 @@ public class DatabaseAccess{
     public ArrayList<String> fetchTables(){
         ArrayList <String> tableString = new ArrayList<String>();
         try{
-            Statement myStmt = dbConnect.createStatement();
             String query = "SHOW TABLES";
-            results = myStmt.executeQuery(query);
+            Statement stmt = dbConnect.createStatement();
+            results = stmt.executeQuery(query);
+            stmt.close();
             while(results.next()){
-                System.out.println(results.getString("TABLE_NAME"));
+                tableString.add(results.getString(1));
             }
         } catch (SQLException e){
             System.err.print("Could not execute query.");
         }
         return tableString;
     }
-    public String[] fetchTypes(String table){
-        String [] temp ={"Cool"};
-        return temp;
+    public ArrayList<String> fetchColumns(String table){
+        ArrayList <String> typeString = new ArrayList<String>();
+        try{
+            String query = "SELECT * FROM " + table;
+            Statement stmt = dbConnect.createStatement();
+            results = stmt.executeQuery(query);
+            ResultSetMetaData resultMD = results.getMetaData();
+            int columns = resultMD.getColumnCount();
+            for (int j =1; j<columns+1;j++){
+                typeString.add(resultMD.getColumnName(j));
+            }
+            stmt.close();
+        } catch(SQLException e){
+            System.err.println("Could not execute query");
+        }
+        return typeString;
     }
     public void close(){
         try{
+            results.close();
             dbConnect.close();
         }
         catch (SQLException e){
             System.err.println("Could not fully close");
         }
     }
-    public static void main(String[] args){
-        DatabaseAccess myTest = new DatabaseAccess("jdbc:mysql://localhost/inventory","ethan", "Roxanne3");
-        myTest.initializeConnection();
-        ArrayList<String> cool = myTest.fetchTables();
+    public ArrayList<String> fetchTypes(String table){
+        ArrayList <String> typeString = new ArrayList<String>();
+        try{
+            String query = "SELECT * FROM " + table;
+            Statement stmt = dbConnect.createStatement();
+            results= stmt.executeQuery(query);
+            while(results.next()){
+                if(!typeString.contains(results.getString("Type"))){
+                    typeString.add(results.getString("Type"));
+                }
+            }
+            stmt.close();
+        } catch(SQLException e){
+            System.out.println("Could not execute query");
+        }
+        return typeString;
+    }
+    public ArrayList<String> fetchSpecificType(String table, String type){
+        ArrayList <String> columns = fetchColumns(table);
+        ArrayList<String> validArray = new ArrayList<String>();
+        try{
+        String query = "SELECT * FROM " +table;
+        Statement stmt = dbConnect.createStatement();
+        results = stmt.executeQuery(query);
+        while(results.next()){
+            if(results.getString("Type").equals(type)){
+            String temp ="";
+            for(int i = 0; i<columns.size();i++){
+                if(i<columns.size()-1){
+                    temp += results.getString(columns.get(i))+"/";
+                }
+                else{
+                    temp+= results.getString(columns.get(i));
+                }
+            }
+            validArray.add(temp);
+        }
+        }
+        stmt.close();
+        } catch(SQLException e){
+            System.err.println("Could not execute query");
+        }
+        return validArray;
+    }
+    public <T> T[] objectConstructor(String table, String type){
+        ArrayList<String> validRows = fetchSpecificType(table, type);
+        if(table.equals("chair")){
+            Chair[] returnChair = new Chair[validRows.size()];
+            for(int i = 0; i<validRows.size();i++){
+                String temp = validRows.get(i);
+                String[] split = temp.split("/");
+                String id = split[0];
+                String Ctype = split[1];
+                char legs = split[2].charAt(0);
+                char arms = split[3].charAt(0);
+                char seat = split[4].charAt(0);
+                char cushion = split[5].charAt(0);
+                int price = Integer.parseInt(split[6]);
+                String manuID = split[7];
+                returnChair[i] = new Chair(id, Ctype, legs, arms, seat, cushion, price, manuID);
+            }
+            return (T[]) returnChair;
+        }
+        else if(table.equals("desk")){
+            Desk[] returnDesk = new Desk[validRows.size()];
+            for(int i = 0; i<validRows.size();i++){
+                String temp = validRows.get(i);
+                String[] split = temp.split("/");
+                String id = split[0];
+                String Ctype = split[1];
+                char legs = split[2].charAt(0);
+                char top = split[3].charAt(0);
+                char drawer = split[4].charAt(0);
+                int price = Integer.parseInt(split[5]);
+                String manuID = split[6];
+                returnDesk[i] = new Desk(id, Ctype, legs, top, drawer, price, manuID);
+            }
+            return (T[]) returnDesk;
+        }
+        else if(table.equals("filing")){
+            Filing[] returnFiling = new Filing[validRows.size()];
+            for(int i = 0; i<validRows.size();i++){
+                String temp = validRows.get(i);
+                String[] split = temp.split("/");
+                String id = split[0];
+                String Ctype = split[1];
+                char rails = split[2].charAt(0);
+                char drawers = split[3].charAt(0);
+                char cabinet = split[4].charAt(0);
+                int price = Integer.parseInt(split[5]);
+                String manuID = split[6];
+                returnFiling[i] = new Filing(id, Ctype, rails, drawers, cabinet, price, manuID);
+            }
+            return (T[]) returnFiling;
+        }
+        else if(table.equals("lamp")){
+            Lamp[] returnLamp = new Lamp[validRows.size()];
+            for(int i = 0; i<validRows.size();i++){
+                String temp = validRows.get(i);
+                String[] split = temp.split("/");
+                String id = split[0];
+                String Ctype = split[1];
+                char base = split[2].charAt(0);
+                char bulb = split[3].charAt(0);
+                int price = Integer.parseInt(split[4]);
+                String manuID = split[5];
+                returnLamp[i] = new Lamp(id, Ctype, base, bulb, price, manuID);
+            }
+            return (T[]) returnLamp;
+        }
+        else{
+            T[] empty = null;
+            return empty;
+        }
     }
 }
