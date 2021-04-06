@@ -19,12 +19,12 @@ import java.io.*;
 public class WriteText{
     private BufferedWriter writer;
     private String fileName = "orderform.txt";  //hardcoding filename
-    private String category;
-    private String type;
-    private String number;
-    private String[] itemIDs;
-    private String price;
-    private String output;
+    private String category;    //Furniture category used in the orderform output
+    private String type;    //Type of furniture in the category, used in orderform
+    private String number;  //Number of furniture items ordered, used in orderform
+    private String[] itemIDs;   //An array of strings for the furniture to be purchased
+    private String price;   //Total price of all furniture purchased
+    private String output;  //String containing the formatted orderform
 
     /**
      * WriteText is a constructor that instantiates a WriteText object with all
