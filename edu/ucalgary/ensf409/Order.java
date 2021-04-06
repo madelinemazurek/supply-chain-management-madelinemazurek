@@ -38,19 +38,24 @@ public class Order <T> {
     }
 
     /**
-     * Getter for all ID's
-     * @return
+     * Getter for all ID's in the order, returned as an array of strings.
+     * @return String array of ID's for all items in the order.
      */
     public String[] getIDs(){
         ArrayList<String> retString = new ArrayList<>();
-
+        //add ID to array list for each item
         for(int i = 0; i < this.items.size(); i++) {
             retString.add(((FurnitureItem)this.items.get(i)).getID());
         }
+        //return array list as an array
         return (String[]) retString.toArray(new String[0]);
     }
 
+    /**
+     * Method used by constructor to calculate total cost for the order.
+     */
     public void calculateCost(){
+        //cost starts as zero, add cost of each item in order.
         for(int i = 0; i < this.items.size(); i++){
             this.cost += ((FurnitureItem)this.items.get(i)).getPrice();
         }
