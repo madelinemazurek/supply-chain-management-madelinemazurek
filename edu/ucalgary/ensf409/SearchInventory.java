@@ -21,17 +21,22 @@ public class SearchInventory <T> {
     private String furnitureCategory; //table in database to be searched
     private int numItems; //number of items that the order must fulfill
 
-    private ArrayList<T> items = new ArrayList<>(); //array of all items of model type in the current inventory
-    private ArrayList <Order<FurnitureItem>> allOrders = new ArrayList<>(); //array of all possible orders that satisfy requirements
-                                                                            //not considering cost, simply every possible order
+    //array of all items of model type in the current inventory
+    private ArrayList<T> items = new ArrayList<>(); 
+
+    //array of all possible orders that satisfy requirements not considering cost,
+    //simply every possible order
+    private ArrayList <Order<FurnitureItem>> allOrders = new ArrayList<>(); 
+                                                                            
     private Order<FurnitureItem> bestOrder; //the cheapest order that satisfies the requirements
     private boolean orderFound = false; // true if an order can be fulfilled, false otherwise
 
     /**
-     * SearchInventory constructor recieves all information for a requested order (furnitureCategory, model, numItems),
-     *  as well as the DatabaseAccess object that is used to retrieve the desired information from the database.
-     *  Initializes all fields by calling generateAllSets() and selectBestOrder(), which initialize the bestOrder and
-     *  orderFound fields after performing their desired functionality.
+     * SearchInventory constructor recieves all information for a requested order
+     *  (furnitureCategory, model, numItems), as well as the DatabaseAccess object that is used
+     *  to retrieve the desired information from the database. Initializes all fields by calling
+     *  generateAllSets() and selectBestOrder(), which initialize the bestOrder and orderFound
+     *  fields after performing their desired functionality.
      * @param furnitureCategory Table in database to be searched.
      * @param model Type of FurnitureItem to be searched for.
      * @param numItems Number of items that the order must fulfill.
@@ -41,30 +46,38 @@ public class SearchInventory <T> {
         this.furnitureCategory = furnitureCategory;
         this.numItems = numItems;
 
-        //call databaseAccess method to initialize items array
+        //call databaseAccess method to initialize items array,
+        //contains the reduced table, which only includes the rows with the right type
         T[] tempArray = db.objectConstructor(furnitureCategory, model);
         for(int i = 0; i < tempArray.length; i++){
             this.items.add(tempArray[i]);
         }
 
-        generateAllSets();
-        selectBestOrder();
+        generateAllSets(); //creates a powerset from the set of all eligible items, 
+        selectBestOrder(); //finds the cheapest of all orders that fulfill requirements
     }
 
+    /**
+     * Getter for OrderFound field.
+     * @return True if an order can be fulfilled, false otherwise.
+     */
     public boolean getOrderFound() {
         return this.orderFound;
     }
 
+    /**
+     * Getter for BestOrder field.
+     * @return The cheapest order that satisfies all of the requirements.
+     */
     public Order<FurnitureItem> getBestOrder() {
         return bestOrder;
     }
 
-    //public void generateAllSets()
-    //runs through all possible sets (power set of items) calling checkValidSet() for each
-
-    //applicableTableRows is what is returned from databaseAccess class and contains the 
-    //reduced table which only includes the rows with the right type
-    
+    /**
+     * Method generateAllSets runs through all possible sets (power set of items) calling
+     *  checkValidSet() for each. See commenting for a rigorous expaination of the implentation.
+     * @param <T> Generic type for any FurnitureItem object.
+     */
     private <T> void generateAllSets(){
 
         //We calculate the total number of subsets from the set of all matching furniture types.
@@ -78,15 +91,15 @@ public class SearchInventory <T> {
             ArrayList<T> subset= new ArrayList<>();
             //in the inner loop, we iterate from zero to the size of the original set
             //we imagine i as a binary number, and we will use the set bits to determine 
-            // which elements to include in this element of the powerset
+            //which elements to include in this element of the powerset
             for(int j = 0; j < items.size();j++){
                 //we will create a bitmask to determine which of the bits of i are set
-                //we create the bitmask by left shifting a 1 by j bits, and then bitwise ANDing i and the bit-shifted 1
-                //if the result of the bitwise AND isn't zero, we know that the bitmask's 1 overlapped with a 1 in i
-                //therefore, we include it in the subset
+                //we create the bitmask by left shifting a 1 by j bits, and then bitwise ANDing i and
+                //the bit-shifted 1. If the result of the bitwise AND isn't zero, we know that the
+                //bitmask's 1 overlapped with a 1 in i therefore, we include it in the subset
                 if((i & (1<<j)) != 0){
-                    //we iterate through every bit of i using this left shifting bit mask to determine all elements
-                    //that should be contained in the subset
+                    //we iterate through every bit of i using this left shifting bit mask to determine
+                    //all elements that should be contained in the subset
                     subset.add((T)items.get(j));
                 }
             }
@@ -95,27 +108,34 @@ public class SearchInventory <T> {
         }
     }
 
-    //method checkValidSet returns void
-    //calls check_____Set based on which type of FurnitureItem is requested
-    //if check______Set returns true, create order for set and add order to allOrders
+    /**
+     * Method checkValidSet calls check_____Set based on which type of FurnitureItem is requested
+     *  for the order. If check______Set returns true, create order for set and add order to allOrders.
+     * @param <T>  Generic type for any FurnitureItem object.
+     * @param subset Any subset of the items array.
+     */
     private <T> void checkValidSet(ArrayList<T> subset) {
         if(furnitureCategory.toLowerCase().equals("chair")) {
             if(checkChairSet((Chair[])subset.toArray(new Chair[0])) == true) {
+                //if subset fulfills a vaild order of chairs, create order and add to allOrders.
                 Order<FurnitureItem> theOrder = new Order(subset);
                 allOrders.add(theOrder);
             }
         } else if(furnitureCategory.toLowerCase().equals("desk")) {
             if(checkDeskSet((Desk[])subset.toArray(new Desk[0])) == true) {
+                //if subset fulfills a vaild order of desks, create order and add to allOrders.
                 Order<FurnitureItem> theOrder = new Order(subset);
                 allOrders.add(theOrder);
             }
         } else if(furnitureCategory.toLowerCase().equals("filing")) {
             if(checkFilingSet((Filing[])subset.toArray(new Filing[0])) == true) {
+                //if subset fulfills a vaild order of filing cabinets, create order and add to allOrders.
                 Order<FurnitureItem> theOrder = new Order(subset);
                 allOrders.add(theOrder);
             }
         } else if(furnitureCategory.toLowerCase().equals("lamp")) {
             if(checkLampSet((Lamp[])subset.toArray(new Lamp[0])) == true) {
+                //if subset fulfills a vaild order of lamps, create order and add to allOrders.
                 Order<FurnitureItem> theOrder = new Order(subset);
                 allOrders.add(theOrder);
             }
@@ -123,15 +143,18 @@ public class SearchInventory <T> {
     }
 
     /**
-     * Checks through the chair subset, seing if there are enough instances 
+     * Checks through the chair subset, seeing if there are enough instances 
      *  of each individual field (each type of component) in order for this subset 
      *  to be a complete order.
+     * @param subset An array of chair objects to be analysed.
+     * @return True if this set satisfies a valid order, false otherwise.
      */
     private boolean checkChairSet(Chair[] subset){ 
         int numLegs = 0;
         int numArms = 0;
         int numSeats = 0;
         int numCushions = 0;
+        //count all instances of each field
         for(int i = 0; i < subset.length; i++) {
             if(subset[i].getLegs() == 'Y') {
                 numLegs++;
@@ -146,6 +169,7 @@ public class SearchInventory <T> {
                 numCushions++;
             }
         }
+        //must have at least enough instances of each component to satify an order
         if((numLegs >= numItems)&&(numArms >= numItems)
          &&(numSeats >= numItems)&&(numCushions >= numItems)) {
             return true;
@@ -153,10 +177,18 @@ public class SearchInventory <T> {
         return false;
     }
 
+    /**
+     * Checks through the desk subset, seeing if there are enough instances 
+     *  of each individual field (each type of component) in order for this subset 
+     *  to be a complete order.
+     * @param subset An array of desk objects to be analysed.
+     * @return True if this set satisfies a valid order, false otherwise.
+     */
     private boolean checkDeskSet(Desk[] subset){ 
         int numLegs = 0;
         int numTops = 0;
         int numDrawers = 0;
+        //count all instances of each field
         for(int i = 0; i < subset.length; i++) {
             if(subset[i].getLegs() == 'Y') {
                 numLegs++;
@@ -168,6 +200,7 @@ public class SearchInventory <T> {
                 numDrawers++;
             }
         }
+        //must have at least enough instances of each component to satify an order
         if((numLegs >= numItems)&&(numTops >= numItems)
          &&(numDrawers >= numItems)) {
             return true;
@@ -175,10 +208,18 @@ public class SearchInventory <T> {
         return false;
     }
 
+    /**
+     * Checks through the filing subset, seeing if there are enough instances 
+     *  of each individual field (each type of component) in order for this subset 
+     *  to be a complete order.
+     * @param subset An array of filing objects to be analysed.
+     * @return True if this set satisfies a valid order, false otherwise.
+     */
     private boolean checkFilingSet(Filing[] subset){ 
         int numRails = 0;
         int numDrawers = 0;
         int numCabinets = 0;
+        //count all instances of each field
         for(int i = 0; i < subset.length; i++) {
             if(subset[i].getRails() == 'Y') {
                 numRails++;
@@ -190,6 +231,7 @@ public class SearchInventory <T> {
                 numCabinets++;
             }
         }
+        //must have at least enough instances of each component to satify an order
         if((numRails >= numItems)&&(numDrawers >= numItems)
          &&(numCabinets >= numItems)) {
             return true;
@@ -197,9 +239,17 @@ public class SearchInventory <T> {
         return false;
     }
 
+    /**
+     * Checks through the lamp subset, seeing if there are enough instances 
+     *  of each individual field (each type of component) in order for this subset 
+     *  to be a complete order.
+     * @param subset An array of lamp objects to be analysed.
+     * @return True if this set satisfies a valid order, false otherwise.
+     */
     private boolean checkLampSet(Lamp[] subset){ 
         int numBases = 0;
         int numBulbs = 0;
+        //count all instances of each field
         for(int i = 0; i < subset.length; i++) {
             if(subset[i].getBase() == 'Y') {
                 numBases++;
@@ -208,21 +258,27 @@ public class SearchInventory <T> {
                 numBulbs++;
             }
         }
+        //must have at least enough instances of each component to satify an order
         if((numBases >= numItems)&&(numBulbs >= numItems)) {
             return true;
         }
         return false;
     }
 
-    // selectBestOrder will search for the cheapest order from allOrders,
-    // update bestOrder, and will change orderFound to true if allOrders is not empty
+    /**
+     * Method selectBestOrder will search for the cheapest order from allOrders,
+     *  will update bestOrder, and will change orderFound to true if allOrders is not empty.
+     */
     private void selectBestOrder() { 
+        //no valid orders are possible with given inventory
         if(allOrders.size() == 0) {
             return;
         }
 
+        //at least one valid order has been found.
         this.orderFound = true;
 
+        //find the location of the cheapest order in allOrders
         int cheapestIndex = 0;
         for(int i = 1; i < allOrders.size(); i++) {
             if (allOrders.get(i).getCost() < allOrders.get(cheapestIndex).getCost()) {
@@ -230,6 +286,7 @@ public class SearchInventory <T> {
             }
         }
 
+        //set bestOrder to the cheapest order
         this.bestOrder = allOrders.get(cheapestIndex);
     }
 }
