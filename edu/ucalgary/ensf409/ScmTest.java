@@ -16,25 +16,27 @@ import org.junit.*;
     public class ScmTest {
         @Test
         public void searchInventoryConstructorAndGetOrderFoundTest(){
-
+            //this test will not delete from database. Deletion occurs elsewhere. Done for ease of testing.
             String category = "chair";
             String type = "Mesh";
             int numberOfItems = 1;
             DatabaseAccess db = new DatabaseAccess("jdbc:mysql://localhost/inventory","scm","ensf409");
+            db.initializeConnection();
             SearchInventory test = new SearchInventory(category,type,numberOfItems,db);
-
+            db.close();
             assertEquals("Could not find a combo that works",test.getOrderFound(),true);
         }
 
         @Test
         public void searchInventoryConstructorAndGetBestOrderTest(){
-
+            //this test will not delete from database. Deletion occurs elsewhere. Done for ease of testing.
             String category = "filing";
             String type = "Large";
             int numberOfItems = 2;
             DatabaseAccess db = new DatabaseAccess("jdbc:mysql://localhost/inventory","scm","ensf409");
+            db.initializeConnection();
             SearchInventory test = new SearchInventory(category,type,numberOfItems,db);
-
+            db.close();
             assertNotNull("could not find a combo that works",test.getBestOrder());
         }
 
@@ -45,10 +47,10 @@ import org.junit.*;
             assertEquals("Constructor has incorrectly initialized fields", "dburl", (test.getDburl()));
         }
 
-        @Test
-        // Constructor with three args tested
-        public void constructorTest(String dburl, String username, String password){
-            DatabaseAccess test = new DatabaseAccess(dburl , username, password);
-            assertTrue("Constructor has incorrectly initialized fields", dburl.equals(test.getDburl()));
-        }
+        // @Test
+        // // Constructor with three args tested
+        // public void constructorTest(String dburl, String username, String password){
+        //     DatabaseAccess test = new DatabaseAccess(dburl , username, password);
+        //     assertTrue("Constructor has incorrectly initialized fields", dburl.equals(test.getDburl()));
+        // }
 }
