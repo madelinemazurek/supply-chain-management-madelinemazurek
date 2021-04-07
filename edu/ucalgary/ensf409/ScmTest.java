@@ -66,5 +66,68 @@ import java.util.ArrayList;
             assertEquals("Output strings do not match", expected, actual);
         }
 
+        @Test
+        /*Testing that SearchInventory finds the correct price for a large filing
+            cabinets using the original inventory database. Test does not delete
+            any entries from the database for ease of testing*/
+        public void searchInventoryGetBestPrice1LargeFilingTest(){
+            String category = "filing";
+            String type = "Large";
+            int numberOfItems = 1;
+            DatabaseAccess db = new DatabaseAccess("jdbc:mysql://localhost/inventory","scm","ensf409");
+            db.initializeConnection();
+            SearchInventory test = new SearchInventory(category, type, numberOfItems, db);
+            int price = test.getBestOrder().getCost();
+            db.close();
+            assertEquals("SearchInventory failed to find the correct price", 300, price);
+        }
+
+        @Test
+        /*Testing that SearchInventory finds the correct price for an ergonomic
+            chair using the original inventory database. Test does not delete
+            any entries from the database for ease of testing*/
+        public void searchInventoryGetBestPrice1ErgoChairTest(){
+            String category = "chair";
+            String type = "Ergonomic";
+            int numberOfItems = 1;
+            DatabaseAccess db = new DatabaseAccess("jdbc:mysql://localhost/inventory","scm","ensf409");
+            db.initializeConnection();
+            SearchInventory test = new SearchInventory(category, type, numberOfItems, db);
+            int price = test.getBestOrder().getCost();
+            db.close();
+            assertEquals("SearchInventory failed to find the correct price", 250, price);
+        }
+
+        @Test
+        /*Testing that SearchInventory finds the correct price for 2 desk lamps
+            using the original inventory database. Test does not delete
+            any entries from the database for ease of testing*/
+        public void searchInventoryGetBestPrice2DeskLampTest(){
+            String category = "lamp";
+            String type = "desk";
+            int numberOfItems = 2;
+            DatabaseAccess db = new DatabaseAccess("jdbc:mysql://localhost/inventory","scm","ensf409");
+            db.initializeConnection();
+            SearchInventory test = new SearchInventory(category, type, numberOfItems, db);
+            int price = test.getBestOrder().getCost();
+            db.close();
+            assertEquals("SearchInventory failed to find the correct price", 40, price);
+        }
+
+        @Test
+        /*Testing that SearchInventory finds the correct price for an adjustable
+            desk using the original inventory database. Test does not delete
+            any entries from the database for ease of testing*/
+        public void searchInventoryGetBestPriceTest(){
+            String category = "desk";
+            String type = "Adjustable";
+            int numberOfItems = 1;
+            DatabaseAccess db = new DatabaseAccess("jdbc:mysql://localhost/inventory","scm","ensf409");
+            db.initializeConnection();
+            SearchInventory test = new SearchInventory(category, type, numberOfItems, db);
+            int price = test.getBestOrder().getCost();
+            db.close();
+            assertEquals("SearchInventory failed to find the correct price", 250, price);
+        }
 
 }
