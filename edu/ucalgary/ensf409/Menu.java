@@ -46,7 +46,7 @@ public class Menu {
      */
     public Menu() {
         //default inputs are used for the DatabaseAccess fields as seen below
-        this.databaseObj = new DatabaseAccess("jdbc:mysql://localhost/inventory","scm","ensf409");
+        this.databaseObj = new DatabaseAccess("jdbc:mysql://localhost/inventory","madeline","ensf409");
         databaseObj.initializeConnection();
         //begin user interfacing
         printMenu();
@@ -127,6 +127,8 @@ public class Menu {
 
                         //read in user input
                         this.category = inputObj.nextLine();
+                        this.category = this.category.trim();
+                        this.category = this.category.toLowerCase();
 
                         //check if user inputted quit key, quit program
                         if(category.equals("q")) {
@@ -145,8 +147,11 @@ public class Menu {
                         notValidInput = checkNotValidInput(1, category);
                     }
                     //valid input has been found, move onto next screen
-                    notValidInput = true;
-                    menuControl = 2;
+                    if (!category.equals("q")) {
+                        System.out.println("Your chosen category is: " + category);
+                        notValidInput = true;
+                        menuControl = 2;    
+                    } 
                     break;
                 
                 //case 2 is used to obtain user input, and to initialize type
@@ -168,6 +173,8 @@ public class Menu {
                         
                         //read in user input
                         this.type = inputObj.nextLine();
+                        this.type = this.type.trim();
+                        this.type = this.type.toLowerCase();
 
                         //check if user inputted quit key or navigate up key
                         if(type.equals("^")) {
@@ -186,7 +193,10 @@ public class Menu {
                     notValidInput = true;
                     if(goBack) {
                         menuControl = 1;
-                    } else {
+                    } else if (!type.equals("q")) {
+                        String tempType = type.substring(0, 1).toUpperCase();
+                        tempType += type.substring(1, type.length());
+                        System.out.println("Your chosen type is: " + tempType);
                         menuControl = 3;
                     }
                     break;
@@ -201,6 +211,8 @@ public class Menu {
 
                         //read in user input
                         this.numberOfItems = inputObj.nextLine();
+                        this.numberOfItems = this.numberOfItems.trim();
+                        this.numberOfItems = this.numberOfItems.toLowerCase();
 
                         //check if user inputted quit key or navigate up key
                         if(numberOfItems.equals("^")) {
@@ -219,7 +231,8 @@ public class Menu {
                     notValidInput = true;
                     if(goB) {
                         menuControl = 2;
-                    } else {
+                    } else if (!numberOfItems.equals("q")) {
+                        System.out.println("The number of items selected is: " + numberOfItems);
                         menuControl = 4;
                     }
                     break;
@@ -274,7 +287,7 @@ public class Menu {
                 //find all type options currently available in table
                 ArrayList<String> types = databaseObj.fetchTypes(category);
                 for(int j = 0; j < types.size(); j++) {
-                    if(input.equals(types.get(j))) {
+                    if(input.equals(types.get(j).toLowerCase())) {
                         return false;
                     }
                 }
