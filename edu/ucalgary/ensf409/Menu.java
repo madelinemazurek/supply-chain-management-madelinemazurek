@@ -125,7 +125,7 @@ public class Menu {
                             System.out.print(": ");
                         }
 
-                        //read in user input
+                        //read in user input, account for whitespace and capitalization
                         this.category = inputObj.nextLine();
                         this.category = this.category.trim();
                         this.category = this.category.toLowerCase();
@@ -171,20 +171,32 @@ public class Menu {
                         }
                         System.out.print(typeOptions.get(i) + ": ");
                         
-                        //read in user input
+                        //read in user input, account for whitespace and capitalization
                         this.type = inputObj.nextLine();
                         this.type = this.type.trim();
                         this.type = this.type.toLowerCase();
                         String tempType = type.substring(0, 1).toUpperCase();
                         tempType += type.substring(1, type.length());
                         this.type = tempType;
+                        char[] c = this.type.toCharArray();
+                        String t = "";
+                        for(i = 0; i < c.length; i++) {
+                            if(c[i] == ' ') {
+                                t += c[i];
+                                t += (char)Character.toUpperCase(c[i+1]);
+                                i++;
+                            } else {
+                                t += c[i];
+                            }               
+                        }
+                        this.type = t;
 
                         //check if user inputted quit key or navigate up key
                         if(type.equals("^")) {
                             goBack = true;
                             break;
                         }
-                        if(type.equals("q")) {
+                        if(type.equals("Q")) {
                             quitControl = false;
                             break;
                         }
@@ -196,7 +208,7 @@ public class Menu {
                     notValidInput = true;
                     if(goBack) {
                         menuControl = 1;
-                    } else if (!type.equals("q")) {                 
+                    } else if (!type.equals("Q")) {                 
                         System.out.println("Your chosen type is: " + type);
                         menuControl = 3;
                     }
@@ -210,10 +222,9 @@ public class Menu {
                                          + " to change your type input. Otherwise,");
                         System.out.println("3) Enter the amount of items (or input q to quit): ");
 
-                        //read in user input
+                        //read in user input, account for whitespace
                         this.numberOfItems = inputObj.nextLine();
                         this.numberOfItems = this.numberOfItems.trim();
-                        this.numberOfItems = this.numberOfItems.toLowerCase();
 
                         //check if user inputted quit key or navigate up key
                         if(numberOfItems.equals("^")) {
@@ -361,7 +372,7 @@ public class Menu {
             //print out IDs of order and the price
             String[] idArray = searchInventoryObj.getBestOrder().getIDs();
             int i = 0;
-            System.out.println("Purchase ");
+            System.out.print("\nPurchase ");
 
             for(i = 0; i < idArray.length - 1; i++) {
                 if(i == idArray.length - 2) {
