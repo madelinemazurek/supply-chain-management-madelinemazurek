@@ -309,13 +309,13 @@ public class Menu {
     private void obtainOutputMessage() {
         //initialzing the searchInventory will run the search and store the required information
         //inside the searchInventoryObj fields
-        this.searchInventoryObj = new SearchInventory(category,type,Integer.parseInt(numberOfItems), 
+        this.searchInventoryObj = new SearchInventory(category, type, Integer.parseInt(numberOfItems), 
                                                       databaseObj);
         //if an order is possible based on current inventory orderFound will be true
-        if(!searchInventoryObj.getOrderFound()){
+        if(!searchInventoryObj.getOrderFound()) {
                 
             //if here it means that the request could not be fulfilled so print out a message and return
-            System.out.println("Order cannot be fulfilled based on current inventory. Suggested"
+            System.out.print("\nOrder cannot be fulfilled based on current inventory. Suggested"
                              + " manufacturers are ");
                 
             //print out the suggested manufacturers that match the given category
@@ -324,7 +324,7 @@ public class Menu {
             for(j = 0; j < manuIdArray.size() - 1; j++) {
                 if(j == manuIdArray.size() - 2) {
                     //at second last id
-                    System.out.print(manuIdArray.get(j) + "and ");
+                    System.out.print(manuIdArray.get(j) + ", and ");
                 }
                 else {
                     System.out.print(manuIdArray.get(j) + ", ");
