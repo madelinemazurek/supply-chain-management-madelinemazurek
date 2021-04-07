@@ -45,6 +45,15 @@ public class WriteText{
     }
 
     /**
+     * Method getOutput return the output string that would be written into
+     *  the output file.
+     * @return Returns a string containing the output string.
+     */
+    public String getOutput(){
+        return this.output;
+    }
+
+    /**
      * writeOutput is a method that instantiates a BufferedWriter object and
      *  writes a string that contains the order form to an external text file
      *  called "orderform.txt". writeOutput calls formatOutput in order to

@@ -46,7 +46,7 @@ public class Menu {
      */
     public Menu() {
         //default inputs are used for the DatabaseAccess fields as seen below
-        this.databaseObj = new DatabaseAccess("jdbc:mysql://localhost/inventory","madeline","ensf409");
+        this.databaseObj = new DatabaseAccess("jdbc:mysql://localhost/inventory","scm","ensf409");
         databaseObj.initializeConnection();
         //begin user interfacing
         printMenu();
@@ -175,6 +175,9 @@ public class Menu {
                         this.type = inputObj.nextLine();
                         this.type = this.type.trim();
                         this.type = this.type.toLowerCase();
+                        String tempType = type.substring(0, 1).toUpperCase();
+                        tempType += type.substring(1, type.length());
+                        this.type = tempType;
 
                         //check if user inputted quit key or navigate up key
                         if(type.equals("^")) {
@@ -193,10 +196,8 @@ public class Menu {
                     notValidInput = true;
                     if(goBack) {
                         menuControl = 1;
-                    } else if (!type.equals("q")) {
-                        String tempType = type.substring(0, 1).toUpperCase();
-                        tempType += type.substring(1, type.length());
-                        System.out.println("Your chosen type is: " + tempType);
+                    } else if (!type.equals("q")) {                 
+                        System.out.println("Your chosen type is: " + type);
                         menuControl = 3;
                     }
                     break;
@@ -287,7 +288,7 @@ public class Menu {
                 //find all type options currently available in table
                 ArrayList<String> types = databaseObj.fetchTypes(category);
                 for(int j = 0; j < types.size(); j++) {
-                    if(input.equals(types.get(j).toLowerCase())) {
+                    if(input.equals(types.get(j))) {
                         return false;
                     }
                 }
