@@ -57,7 +57,22 @@ public class Menu {
     /**
      * Menu constructor used exclusively for unit testing.
      */
-    public Menu(int testingFlag) {
+    public Menu(String category, String type, String numberOfItems) {
+        this.category = category;
+        this.type = type;
+        this.numberOfItems = numberOfItems;
+        //default inputs are used for the DatabaseAccess fields as seen below
+        this.databaseObj = new DatabaseAccess("jdbc:mysql://localhost/inventory","scm","ensf409");
+        databaseObj.initializeConnection();
+    }
+
+    /**
+     * Getter for databaseAccess object.
+     * @return The databaseAccess object that provides the connection and interfacing with the
+     *  inventory database.
+     */
+    public DatabaseAccess getDatabaseObj() {
+        return databaseObj;
     }
 
     /**
