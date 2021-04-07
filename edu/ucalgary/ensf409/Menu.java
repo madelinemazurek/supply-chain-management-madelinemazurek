@@ -55,6 +55,12 @@ public class Menu {
     }
 
     /**
+     * Menu constructor used exclusively for unit testing.
+     */
+    public Menu(int testingFlag) {
+    }
+
+    /**
      * Getter for Category.
      * @return The requested FurnitureItem category for the order.
      */
@@ -256,7 +262,7 @@ public class Menu {
      *  considered invalid.
       * @param i Int input field that specifies what check to carry out on user input.
       * @param input The String read in from the user input scanner.
-      * @return True if a vailid input was found, false otherwise.
+      * @return True if an invailid input was found, false otherwise.
       */
     public boolean checkNotValidInput(int i, String input) {
         switch(i) {
@@ -287,7 +293,6 @@ public class Menu {
                 String tempType = input.substring(0, 1).toUpperCase();
                 tempType += input.substring(1, input.length());
                 input = tempType;
-                System.out.println("input: " +input);
                 char[] c = input.toCharArray();
                 String t = "";
                 for(i = 0; i < c.length; i++) {
