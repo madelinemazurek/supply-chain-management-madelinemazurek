@@ -125,10 +125,8 @@ public class Menu {
                             System.out.print(": ");
                         }
 
-                        //read in user input, account for whitespace and capitalization
+                        //read in user input
                         this.category = inputObj.nextLine();
-                        this.category = this.category.trim();
-                        this.category = this.category.toLowerCase();
 
                         //check if user inputted quit key, quit program
                         if(category.equals("q")) {
@@ -171,32 +169,15 @@ public class Menu {
                         }
                         System.out.print(typeOptions.get(i) + ": ");
                         
-                        //read in user input, account for whitespace and capitalization
+                        //read in user input
                         this.type = inputObj.nextLine();
-                        this.type = this.type.trim();
-                        this.type = this.type.toLowerCase();
-                        String tempType = type.substring(0, 1).toUpperCase();
-                        tempType += type.substring(1, type.length());
-                        this.type = tempType;
-                        char[] c = this.type.toCharArray();
-                        String t = "";
-                        for(i = 0; i < c.length; i++) {
-                            if(c[i] == ' ') {
-                                t += c[i];
-                                t += (char)Character.toUpperCase(c[i+1]);
-                                i++;
-                            } else {
-                                t += c[i];
-                            }               
-                        }
-                        this.type = t;
 
                         //check if user inputted quit key or navigate up key
                         if(type.equals("^")) {
                             goBack = true;
                             break;
                         }
-                        if(type.equals("Q")) {
+                        if(type.equals("q")) {
                             quitControl = false;
                             break;
                         }
@@ -208,7 +189,7 @@ public class Menu {
                     notValidInput = true;
                     if(goBack) {
                         menuControl = 1;
-                    } else if (!type.equals("Q")) {                 
+                    } else if (!type.equals("q")) {                 
                         System.out.println("Your chosen type is: " + type);
                         menuControl = 3;
                     }
@@ -222,9 +203,8 @@ public class Menu {
                                          + " to change your type input. Otherwise,");
                         System.out.println("3) Enter the amount of items (or input q to quit): ");
 
-                        //read in user input, account for whitespace
+                        //read in user input
                         this.numberOfItems = inputObj.nextLine();
-                        this.numberOfItems = this.numberOfItems.trim();
 
                         //check if user inputted quit key or navigate up key
                         if(numberOfItems.equals("^")) {
@@ -278,10 +258,15 @@ public class Menu {
       * @param input The String read in from the user input scanner.
       * @return True if a vailid input was found, false otherwise.
       */
-    private boolean checkNotValidInput(int i, String input) {
+    public boolean checkNotValidInput(int i, String input) {
         switch(i) {
             //check if category inputted is valid by comparing it to a list of table names in the database 
             case 1: 
+                //edit user input to account for whitespace and capitalization
+                input = input.trim();
+                input = input.toLowerCase();
+                this.category = input;
+
                 //find all category options currently available
                 ArrayList<String> categories = databaseObj.fetchTables();
                 for(int j = 0; j < categories.size(); j++) {
@@ -296,6 +281,27 @@ public class Menu {
             //will only get here if category entered is correct so we already know what table we are in.
             //Use this info to check if a valid type has been entered for the category
             case 2:
+                //edit user input to account for whitespace and capitalization
+                input = input.trim();
+                input = input.toLowerCase();
+                String tempType = input.substring(0, 1).toUpperCase();
+                tempType += input.substring(1, input.length());
+                input = tempType;
+                System.out.println("input: " +input);
+                char[] c = input.toCharArray();
+                String t = "";
+                for(i = 0; i < c.length; i++) {
+                    if(c[i] == ' ') {
+                        t += c[i];
+                        t += (char)Character.toUpperCase(c[i+1]);
+                        i++;
+                    } else {
+                        t += c[i];
+                    }               
+                }
+                input = t;
+                this.type = t;
+
                 //find all type options currently available in table
                 ArrayList<String> types = databaseObj.fetchTypes(category);
                 for(int j = 0; j < types.size(); j++) {
@@ -309,6 +315,10 @@ public class Menu {
 
             //check if number of items inputted is valid positive integer
             case 3:
+                //edit user input to account for whitespace
+                input = input.trim();
+                this.numberOfItems = input;
+
                 try {
                     int inputAmount = Integer.parseInt(input);
                     if(inputAmount < 1) {
