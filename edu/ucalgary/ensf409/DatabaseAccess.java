@@ -111,7 +111,9 @@ public class DatabaseAccess{
      */
     public void close() {
         try {
-            results.close();
+            if (results != null) {
+                results.close();
+            }
             dbConnect.close();
         }
         catch (SQLException e) {
