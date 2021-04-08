@@ -23,9 +23,15 @@ import java.util.*;
  *  random, and altering the database may invalidate later tests. Therefore, for ease of testing, we opted
  *  to not include the deletion of the returned order in that test. We still demonstrate the ability to
  *  access the database and delete the specified order in the video included in our project submission.
+ * 
+ *  See the README file for more information on hoe to compile and run these tests.
  */
 public class ScmTest {
     @Test
+    /**
+     * Tests the SearchInventory constructor by instantiating it with an order for one mesh chair. Tests
+     *  to see that the function calls within the SearchInventory constructor find a valid order.
+     */
     public void searchInventoryConstructorAndGetOrderFoundTest(){
         //this test will not delete from database. Deletion occurs elsewhere. Done for ease of testing.
         String category = "chair";
@@ -39,6 +45,10 @@ public class ScmTest {
     }
 
     @Test
+    /**
+     * Tests to see that the method calls within the SearchInventory constructor find a minimum price
+     *  order from all possible combinations of valid orders for 2 large filing cabinets.
+     */
     public void searchInventoryConstructorAndGetBestOrderTest(){
         //this test will not delete from database. Deletion occurs elsewhere. Done for ease of testing.
         String category = "filing";
@@ -52,7 +62,10 @@ public class ScmTest {
     }
 
     @Test
-    //testing method formatOutput in WriteText
+    /**
+     * Tests to see that the string written to the orderform.txt file for the specified order information
+     *  matches the expected string
+     */
     public void formatOutputTest() {
         String category = "Chair";
         String type = "Mesh";
@@ -642,7 +655,8 @@ public class ScmTest {
 
     @Test
     /**
-     * Tests getLegs() method by creating a Chair object and seeing if getter method properly returns the correct value.
+     * Tests getLegs() method by creating a Chair object and seeing if getter method properly returns the
+     *  correct value.
      */
     public void chairConstructorAndGetLegsTest(){
         Chair test = new Chair("1234", "mesh", 'Y', 'N', 'N', 'N', 1000000, "4567");
@@ -651,7 +665,8 @@ public class ScmTest {
 
     @Test
     /**
-     * Tests getArms() method by creating a Chair object and seeing if getter method properly returns the correct value.
+     * Tests getArms() method by creating a Chair object and seeing if getter method properly returns the
+     *  correct value.
      */
     public void chairConstructorAndGetArmsTest(){
         Chair test = new Chair("1234", "mesh", 'N', 'Y', 'N', 'N', 1000000, "4567");
@@ -660,7 +675,8 @@ public class ScmTest {
 
     @Test
     /**
-     * Tests getSeat() method by creating a Chair object and seeing if the getter method properly returns the correct value.
+     * Tests getSeat() method by creating a Chair object and seeing if the getter method properly returns
+     *  the correct value.
      */
     public void chairConstructorAndGetSeatTest(){
         Chair test = new Chair("1234", "mesh", 'N', 'N', 'Y', 'N', 1000000, "4567");
@@ -669,7 +685,8 @@ public class ScmTest {
 
     @Test
     /**
-     * Tests getCushion() method by creating a Chair object and seeing if the getter method properly returns the correct value.
+     * Tests getCushion() method by creating a Chair object and seeing if the getter method properly
+     *  returns the correct value.
      */
     public void chairConstructorAndGetCushionTest(){
         Chair test = new Chair("1234", "mesh", 'N', 'N', 'N', 'Y', 1000000, "4567");
@@ -678,7 +695,8 @@ public class ScmTest {
 
     @Test
     /**
-     * Tests getLegs() method by creating a Desk object and seeing if the getter method properly returns the correct value.
+     * Tests getLegs() method by creating a Desk object and seeing if the getter method properly returns
+     *  the correct value.
      */
     public void deskConstructorAndGetLegsTest(){
         Desk test = new Desk("1234", "Standing", 'Y', 'N', 'N', 1000000, "4567");
@@ -687,7 +705,8 @@ public class ScmTest {
 
     @Test
     /**
-     * Tests getTop() method by creating a Desk object and seeing if the getter method properly returns the correct value.
+     * Tests getTop() method by creating a Desk object and seeing if the getter method properly returns
+     *  the correct value.
      */
     public void deskConstructorAndGetTopTest(){
         Desk test = new Desk("1234", "Standing", 'N', 'Y', 'N', 1000000, "4567");
@@ -696,7 +715,8 @@ public class ScmTest {
 
     @Test
     /**
-     * Tests getDrawer() method by creating a Desk object and seeing if the getter method properly returns the correct value.
+     * Tests getDrawer() method by creating a Desk object and seeing if the getter method properly returns
+     *  the correct value.
      */
     public void deskConstructorAndGetDrawerTest(){
         Desk test = new Desk("1234", "Standing", 'N', 'N', 'Y', 1000000, "4567");
@@ -705,7 +725,8 @@ public class ScmTest {
 
     @Test
     /**
-     * Tests getRails() method by creating a Filing object and seeing if the getter method properly returns the correct value.
+     * Tests getRails() method by creating a Filing object and seeing if the getter method properly returns
+     *  the correct value.
      */
     public void filingConstructorAndGetRailsTest(){
         Filing test = new Filing("1234", "Standing", 'Y', 'N', 'N', 1000000, "4567");
@@ -714,7 +735,8 @@ public class ScmTest {
 
     @Test
     /**
-     * Tests getDrawers() method by creating a Filing object and seeing if the getter method properly returns the correct value.
+     * Tests getDrawers() method by creating a Filing object and seeing if the getter method properly returns
+     *  the correct value.
      */
     public void filingConstructorAndGetDrawersTest(){
         Filing test = new Filing("1234", "Standing", 'N', 'Y', 'N', 1000000, "4567");
@@ -723,7 +745,8 @@ public class ScmTest {
 
     @Test
     /**
-     * Tests getCabinet() method by creating a Filing object and seeing if the getter method properly returns the correct value.
+     * Tests getCabinet() method by creating a Filing object and seeing if the getter method properly returns
+     *  the correct value.
      */
     public void filingConstructorAndGetCabinetTest(){
         Filing test = new Filing("1234", "Standing", 'N', 'N', 'Y', 1000000, "4567");
@@ -732,7 +755,8 @@ public class ScmTest {
 
     @Test
     /**
-     * Tests getBase() method by creating a Lamp object and seeing if the getter method properly returns the correct value.
+     * Tests getBase() method by creating a Lamp object and seeing if the getter method properly returns the
+     *  correct value.
      */
     public void lampConstructorAndGetBaseTest(){
         Lamp test = new Lamp("1234", "Standing", 'Y', 'N', 1000000, "4567");
@@ -741,7 +765,8 @@ public class ScmTest {
 
     @Test
     /**
-     * Tests getBulb() method by creating a Lamp object and seeing if the getter method properly returns the correct value.
+     * Tests getBulb() method by creating a Lamp object and seeing if the getter method properly returns the
+     *  correct value.
      */
     public void lampConstructorAndGetBulbTestTest(){
         Lamp test = new Lamp("1234", "Standing", 'N', 'Y', 1000000, "4567");
@@ -750,7 +775,8 @@ public class ScmTest {
 
     @Test
     /**
-     * Tests getID() method by creating a FurnitureItem object and seeing if the getter method properly returns the correct value.
+     * Tests getID() method by creating a FurnitureItem object and seeing if the getter method properly returns
+     *  the correct value.
      */
     public void furnitureItemConstructorAndGetIDTest(){
         FurnitureItem test = new FurnitureItem("1234", "Standing", 1000000, "4567");
@@ -759,7 +785,8 @@ public class ScmTest {
 
     @Test
     /**
-     * Tests getType() method by creating a FurnitureItem object and seeing if the getter method properly returns the correct value.
+     * Tests getType() method by creating a FurnitureItem object and seeing if the getter method properly returns
+     *  the correct value.
      */
     public void furnitureItemConstructorAndGetTypeTest(){
         FurnitureItem test = new FurnitureItem("1234", "Standing", 1000000, "4567");
@@ -768,7 +795,8 @@ public class ScmTest {
 
     @Test
     /**
-     * Tests getPrice() method by creating a FurnitureItem object and seeing if the getter method properly returns the correct value.
+     * Tests getPrice() method by creating a FurnitureItem object and seeing if the getter method properly returns
+     *  the correct value.
      */
     public void furnitureItemConstructorAndGetPriceTest(){
         FurnitureItem test = new FurnitureItem("1234", "Standing", 1000000, "4567");
@@ -777,7 +805,8 @@ public class ScmTest {
 
     @Test
     /**
-     * Tests getManuID() method by creating a FurnitureItem object and seeing if the getter method properly returns the correct value.
+     * Tests getManuID() method by creating a FurnitureItem object and seeing if the getter method properly
+     *  returns the correct value.
      */
     public void furnitureItemConstructorAndGetManuIDTest(){
         FurnitureItem test = new FurnitureItem("1234", "Standing", 1000000, "4567");
@@ -827,10 +856,10 @@ public class ScmTest {
     @Test
     /**
      * Tests checkNotValidInput() in Menu by simulating user input for
-     * a category requested and seeing if it returns the correct
+     * a category requested (chair) and seeing if it returns the correct
      * boolean
      */
-    public void menuCheckNotValidTest(){
+    public void menuCheckNotValidTestChair(){
         Menu test = new Menu("chair","Mesh","6");
         boolean isNotValid = test.checkNotValidInput(1,test.getCategory());
         test.getDatabaseObj().close();
@@ -840,10 +869,10 @@ public class ScmTest {
     @Test
     /**
      * Tests checkNotValidInput() in Menu by simulating user input for
-     * a category requested and seeing if it returns the correct
+     * a category requested (CHAIR) and seeing if it returns the correct
      * boolean
      */
-    public void menuCheckNotValidTestTwo(){
+    public void menuCheckNotValidTestCHAIR(){
         Menu test = new Menu("CHAIR","Mesh","6");
         boolean isNotValid = test.checkNotValidInput(1,test.getCategory());
         test.getDatabaseObj().close();
@@ -853,10 +882,10 @@ public class ScmTest {
     @Test
     /**
      * Tests checkNotValidInput() in Menu by simulating user input for
-     * a category requested and seeing if it returns the correct
+     * a category requested (   CHaIR   ) and seeing if it returns the correct
      * boolean
      */
-    public void menuCheckNotValidTestThree(){
+    public void menuCheckNotValidTestCHaIR(){
         Menu test = new Menu("  CHaIR   ","Mesh","6");
         boolean isNotValid = test.checkNotValidInput(1,test.getCategory());
         test.getDatabaseObj().close();
@@ -866,10 +895,10 @@ public class ScmTest {
     @Test
     /**
      * Tests checkNotValidInput() in Menu by simulating user input for
-     * a category requested and seeing if it returns the correct
+     * a category requested (invalid) and seeing if it returns the correct
      * boolean
      */
-    public void menuCheckNotValidTestFour(){
+    public void menuCheckNotValidTestInvalid(){
         Menu test = new Menu("invalid","Mesh","6");
         boolean isNotValid = test.checkNotValidInput(1,test.getCategory());
         test.getDatabaseObj().close();
@@ -879,10 +908,10 @@ public class ScmTest {
     @Test
     /**
      * Tests checkNotValidInput() in Menu by simulating user input for
-     * a type requested and seeing if it returns the correct
+     * a type requested (Mesh) and seeing if it returns the correct
      * boolean
      */
-    public void menuCheckNotValidTestFive(){
+    public void menuCheckNotValidTestMesh(){
         Menu test = new Menu("chair","Mesh","6");
         boolean isNotValid = test.checkNotValidInput(2,test.getType());
         test.getDatabaseObj().close();
@@ -892,10 +921,10 @@ public class ScmTest {
     @Test
     /**
      * Tests checkNotValidInput() in Menu by simulating user input for
-     * a type requested and seeing if it returns the correct
+     * a type requested (mESH) and seeing if it returns the correct
      * boolean
      */
-    public void menuCheckNotValidTestSix(){
+    public void menuCheckNotValidTestmESH(){
         Menu test = new Menu("chair","mESH","6");
         boolean isNotValid = test.checkNotValidInput(2,test.getType());
         test.getDatabaseObj().close();
@@ -905,10 +934,10 @@ public class ScmTest {
     @Test
     /**
      * Tests checkNotValidInput() in Menu by simulating user input for
-     * a type requested and seeing if it returns the correct
+     * a type requested (ThisWontWork) and seeing if it returns the correct
      * boolean
      */
-    public void menuCheckNotValidTestSeven(){
+    public void menuCheckNotValidInvalidType(){
         Menu test = new Menu("chair","ThisWontWork","6");
         boolean isNotValid = test.checkNotValidInput(2,test.getType());
         test.getDatabaseObj().close();
@@ -918,10 +947,10 @@ public class ScmTest {
     @Test
     /**
      * Tests checkNotValidInput() in Menu by simulating user input for
-     * a number of items requested and seeing if it returns the correct
+     * a number of items requested (6) and seeing if it returns the correct
      * boolean
      */
-    public void menuCheckNotValidTestEight(){
+    public void menuCheckNotValidTest6Items(){
         Menu test = new Menu("chair","Mesh","6");
         boolean isNotValid = test.checkNotValidInput(3,test.getNumberOfItems());
         test.getDatabaseObj().close();
@@ -931,10 +960,10 @@ public class ScmTest {
     @Test
     /**
      * Tests checkNotValidInput() in Menu by simulating user input for
-     * a number of items requested and seeing if it returns the correct
+     * a number of items requested (0) and seeing if it returns the correct
      * boolean
      */
-    public void menuCheckNotValidTestNine(){
+    public void menuCheckNotValidTestNoItems(){
         Menu test = new Menu("chair","Mesh","0");
         boolean isNotValid = test.checkNotValidInput(3,test.getNumberOfItems());
         test.getDatabaseObj().close();
@@ -944,10 +973,10 @@ public class ScmTest {
     @Test
     /**
      * Tests checkNotValidInput() in Menu by simulating user input for
-     * a number of items requested and seeing if it returns the correct
+     * a number of items requested (NotANumber) and seeing if it returns the correct
      * boolean
      */
-    public void menuCheckNotValidTestTen(){
+    public void menuCheckNotValidTestNonNumber(){
         Menu test = new Menu("chair","Mesh","NotANumber");
         boolean isNotValid = test.checkNotValidInput(3,test.getNumberOfItems());
         test.getDatabaseObj().close();
@@ -957,10 +986,10 @@ public class ScmTest {
     @Test
     /**
      * Tests checkNotValidInput() in Menu by simulating user input for
-     * a number of items requested and seeing if it returns the correct
+     * a number of items requested (-67) and seeing if it returns the correct
      * boolean
      */
-    public void menuCheckNotValidTestEleven(){
+    public void menuCheckNotValidTestNegative(){
         Menu test = new Menu("chair","Mesh","-67");
         boolean isNotValid = test.checkNotValidInput(3,test.getNumberOfItems());
         test.getDatabaseObj().close();

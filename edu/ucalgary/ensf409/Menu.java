@@ -33,7 +33,8 @@ public class Menu {
 
     /**
      * Main method creates a Menu object, which initializes the connection to the database and launches
-     *  the command line user interface.
+     *  the command line user interface. See the README file for specific information on how to compile
+     *  and run the program. The command line UI will explain the program navigation as you proceed.
      * @param args Unused initial command line string arguments.
      */
     public static void main(String args[]) {
