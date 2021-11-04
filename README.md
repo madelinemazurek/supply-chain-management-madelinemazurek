@@ -1,5 +1,15 @@
 "# supply-chain-management-madelinemazurek" 
 
+This program is designed to provide a user with access to a database of furniture items, with the goal of re-using 
+avaliable furniture components to promote sustainability and enviromental responsibilty. 
+
+By inputting a request for furniture items as prompted on the command line, the user is able to request a number
+and type of items to be purchased. The program will then access the live database, calculate the most cost effective
+way to combine avaliable components using bitmasking, complete the order, and return a purchase order form to the user.
+
+Click here for a video overview of the code and functionality of this program:
+https://www.youtube.com/watch?v=jVgCQJguIEg
+
 The Menu class is the driver of our program. It is the file that must be compiled and run. It can be compiled and 
 run with the following commands, assuming the mysql-connector jar file is in a folder called lib in the same 
 directory that holds the edu folder:
